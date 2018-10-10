@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_action_scan.png",
+        "source": "D:\\cnode-weex\\platforms\\android\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_scan.png"
+    },
+    {
+        "merged": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_action_refresh.png",
+        "source": "D:\\cnode-weex\\platforms\\android\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_refresh.png"
+    },
+    {
+        "merged": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\test.png",
+        "source": "D:\\cnode-weex\\platforms\\android\\app\\src\\main\\res\\drawable-xxhdpi\\test.png"
+    }
+]
