@@ -2861,7 +2861,7 @@ var __vue_exports__, __vue_options__
 var __vue_styles__ = []
 
 /* styles */
-__vue_styles__.push(__webpack_require__(8)
+__vue_styles__.push(__webpack_require__(11)
 )
 
 /* script */
@@ -2898,21 +2898,7 @@ module.exports = __vue_exports__
 
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  "navBar": {
-    "position": "fixed",
-    "bottom": 0,
-    "left": 0,
-    "width": "750",
-    "backgroundColor": "#87CEEB",
-    "flexDirection": "row"
-  }
-}
-
-/***/ }),
+/* 8 */,
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2937,18 +2923,18 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
-  name: 'App',
+  name: "App",
   data: function data() {
     return {
       tabBar: [{
-        name: '首页',
-        image: 'local:///test'
+        name: "首页",
+        image: "http://52xuanxuan.com:3000/images/home.png"
       }, {
-        name: '--',
-        image: 'local:///test'
+        name: "--",
+        image: "local:///test"
       }, {
-        name: '我的',
-        image: 'local:///test'
+        name: "我的",
+        image: "local:///test"
       }]
     };
   }
@@ -2967,15 +2953,50 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: ["navBar"]
   }, _vm._l((_vm.tabBar), function(item, key) {
     return _c('div', {
-      key: key
-    }, [_c('text', [_vm._v(_vm._s(item.name))]), _c('image', {
+      key: key,
+      staticClass: ["navBarLine"]
+    }, [_c('image', {
+      staticClass: ["navBarImg"],
       attrs: {
-        "src": "local:///test"
+        "src": item.image
       }
-    })])
+    }), _c('text', {
+      staticClass: ["navBarText"]
+    }, [_vm._v(_vm._s(item.name))])])
   }))], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  "navBar": {
+    "position": "fixed",
+    "bottom": 0,
+    "left": 0,
+    "width": "750",
+    "backgroundColor": "#87CEEB",
+    "flexDirection": "row",
+    "paddingLeft": "20",
+    "paddingRight": "20",
+    "paddingTop": "8",
+    "paddingBottom": "8"
+  },
+  "navBarText": {
+    "textAlign": "center",
+    "fontSize": "26"
+  },
+  "navBarImg": {
+    "width": "50",
+    "height": "50"
+  },
+  "navBarLine": {
+    "flex": 1,
+    "alignItems": "center"
+  }
+}
 
 /***/ })
 /******/ ]);

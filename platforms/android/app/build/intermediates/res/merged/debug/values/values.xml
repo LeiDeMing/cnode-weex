@@ -694,7 +694,7 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <string name="app_name">WEEX APP</string>
+    <string name="app_name">cnode-weex</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="bottom_sheet_behavior" translatable="false">android.support.design.widget.BottomSheetBehavior</string>
     <string name="capture_qrcode_prompt" translatable="false">请将条码置于取景框内扫描</string>
@@ -703,7 +703,7 @@
         support arm architecture devices!
     </string>
     <string name="dummy_content">Hello
-Weex</string>
+World</string>
     <string name="index_tip" translatable="false">Network Error!\n1.Make sure you use the command "npm run serve"
         launched local service\n2.Make sure you modify "your_current_ip" to your local IP in
         "WXMainActivity"

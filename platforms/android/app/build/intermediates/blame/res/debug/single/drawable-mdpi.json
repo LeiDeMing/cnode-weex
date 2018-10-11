@@ -4,8 +4,8 @@
         "source": "D:\\cnode-weex\\platforms\\android\\app\\src\\main\\res\\drawable-mdpi\\ic_action_scan.png"
     },
     {
-        "merged": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\test.png",
-        "source": "D:\\cnode-weex\\platforms\\android\\app\\src\\main\\res\\drawable-mdpi\\test.png"
+        "merged": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\home.png",
+        "source": "D:\\cnode-weex\\platforms\\android\\app\\src\\main\\res\\drawable-mdpi\\home.png"
     },
     {
         "merged": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\ic_action_refresh.png",

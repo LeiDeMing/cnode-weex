@@ -2908,7 +2908,23 @@ module.exports = {
     "left": 0,
     "width": "750",
     "backgroundColor": "#87CEEB",
-    "flexDirection": "row"
+    "flexDirection": "row",
+    "paddingLeft": "20",
+    "paddingRight": "20",
+    "paddingTop": "8",
+    "paddingBottom": "8"
+  },
+  "navBarText": {
+    "textAlign": "center",
+    "fontSize": "26"
+  },
+  "navBarImg": {
+    "width": "50",
+    "height": "50"
+  },
+  "navBarLine": {
+    "flex": 1,
+    "alignItems": "center"
   }
 }
 
@@ -2937,18 +2953,18 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
-  name: 'App',
+  name: "App",
   data: function data() {
     return {
       tabBar: [{
-        name: '首页',
-        image: 'local:///test'
+        name: "首页",
+        image: "local:///test"
       }, {
-        name: '--',
-        image: 'local:///test'
+        name: "--",
+        image: "local:///test"
       }, {
-        name: '我的',
-        image: 'local:///test'
+        name: "我的",
+        image: "local:///test"
       }]
     };
   }
@@ -2967,12 +2983,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: ["navBar"]
   }, _vm._l((_vm.tabBar), function(item, key) {
     return _c('div', {
-      key: key
-    }, [_c('text', [_vm._v(_vm._s(item.name))]), _c('image', {
+      key: key,
+      staticClass: ["navBarLine"]
+    }, [_c('image', {
+      staticClass: ["navBarImg"],
       attrs: {
-        "src": "local:///test"
+        "src": "local:///home"
       }
-    })])
+    }), _c('text', {
+      staticClass: ["navBarText"]
+    }, [_vm._v(_vm._s(item.name))])])
   }))], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
