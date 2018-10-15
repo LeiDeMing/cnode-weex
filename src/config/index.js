@@ -1,30 +1,28 @@
-export default{
-    tabTitles: [
-        {
-          title: "全部",
-          tab:'',
-          icon: "/",
-          activeIcon:
-            "/"
+export default {
+    tabTitles: [{
+            title: "全部",
+            tab: '',
+            icon: "/",
+            activeIcon: "/"
         },
         {
-          title: "精华",
-          tab:'good'
+            title: "精华",
+            tab: 'good'
         },
         {
-          title: "分享",
-          tab:'share'
+            title: "分享",
+            tab: 'share'
         },
         {
-          title: "问答",
-          tab:'ask'
+            title: "问答",
+            tab: 'ask'
         },
         {
-          title: "招聘",
-          tab:'job'
+            title: "招聘",
+            tab: 'job'
         }
-      ],
-      tabStyles: {
+    ],
+    tabStyles: {
         bgColor: "#026fff",
         titleColor: "#eeeeee",
         activeTitleColor: "#ffffff",
@@ -41,23 +39,22 @@ export default{
         activeBottomWidth: 120,
         textPaddingLeft: 10,
         textPaddingRight: 10
-      },
-      tabBar: [
-        {
-          name: "首页",
-          image: "home.png",
-          router: "/"
+    },
+    tabBar: [{
+            name: "首页",
+            image: "home.png",
+            router: "/"
         },
         {
-          name: "--",
-          image: "other.png",
-          router: "/"
+            name: "--",
+            image: "other.png",
+            router: "/"
         },
         {
-          name: "我的",
-          image: "own.png",
-          router: "/own"
+            name: "我的",
+            image: "own.png",
+            router: "/own"
         }
-      ],
-      rootUrl:'https://cnodejs.org/api/v1'
+    ],
+    rootUrl: 'https://cnodejs.org/api/v1'
 }

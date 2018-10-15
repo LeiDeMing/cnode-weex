@@ -22480,7 +22480,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n.home_nav[data-v-f0f67cee] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  flex-direction: row;\n  width: 10rem;\n  font-size: 1.06667rem;\n  background-color: #026fff;\n  padding-left: 0.26667rem;\n}\n.home_nav_text[data-v-f0f67cee] {\n  color: #eeeeee;\n  font-size: 0.4rem;\n  padding-top: 0.26667rem;\n  padding-bottom: 0.26667rem;\n  padding-left: 0.26667rem;\n  padding-right: 0.26667rem;\n}\n.border-cell[data-v-f0f67cee] {\n  background-color: #f2f3f4;\n  width: 10rem;\n  height: 0.32rem;\n  align-items: center;\n  justify-content: center;\n  border-bottom-width: 1px;\n  border-style: solid;\n  border-color: #e0e0e0;\n}\n.content[data-v-f0f67cee] {\n  width: 10rem;\n  height: 4rem;\n  padding-top: 0.26667rem;\n  padding-bottom: 0.26667rem;\n  padding-left: 0.26667rem;\n  padding-right: 0.26667rem;\n  background-color: #ffffff;\n  margin-bottom: 0.32rem;\n}\n.content-Top[data-v-f0f67cee] {\n  flex-direction: row;\n  justify-content: space-between;\n}\n.ct-left[data-v-f0f67cee] {\n  flex-direction: row;\n}\n.ct-left-txt[data-v-f0f67cee] {\n  margin-left: 0.13333rem;\n}\n.ct-left-img[data-v-f0f67cee] {\n  width: 0.53333rem;\n  height: 0.53333rem;\n  border-radius: 100%;\n}\n.ct-r-txt[data-v-f0f67cee] {\n  color: #A29898;\n  font-size: 0.32rem;\n}\n", ""]);
+exports.push([module.i, "\n.com-padding[data-v-f0f67cee], .home_nav_text[data-v-f0f67cee], .content[data-v-f0f67cee] {\n  padding-top: 0.26667rem;\n  padding-bottom: 0.26667rem;\n  padding-left: 0.26667rem;\n  padding-right: 0.26667rem;\n}\n.home_nav[data-v-f0f67cee] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  flex-direction: row;\n  width: 10rem;\n  font-size: 1.06667rem;\n  background-color: #026fff;\n  padding-left: 0.26667rem;\n}\n.home_nav_text[data-v-f0f67cee] {\n  color: #eeeeee;\n  font-size: 0.4rem;\n}\n.border-cell[data-v-f0f67cee] {\n  background-color: #f2f3f4;\n  width: 10rem;\n  height: 0.32rem;\n  align-items: center;\n  justify-content: center;\n  border-bottom-width: 1px;\n  border-style: solid;\n  border-color: #e0e0e0;\n}\n.content[data-v-f0f67cee] {\n  width: 10rem;\n  background-color: #ffffff;\n  margin-bottom: 0.32rem;\n}\n.content-Top[data-v-f0f67cee],\n.content-Bottom[data-v-f0f67cee],\n.content-Bottom-left[data-v-f0f67cee] {\n  flex-direction: row;\n  justify-content: space-between;\n}\n.ct-left[data-v-f0f67cee] {\n  flex-direction: row;\n}\n.ct-left-txt[data-v-f0f67cee] {\n  margin-left: 0.13333rem;\n}\n.ct-left-img[data-v-f0f67cee] {\n  width: 0.53333rem;\n  height: 0.53333rem;\n  border-radius: 100%;\n}\n.ct-r-txt[data-v-f0f67cee] {\n  color: #a29898;\n  font-size: 0.32rem;\n}\n.content-Mid[data-v-f0f67cee] {\n  margin-top: 0.34667rem;\n  margin-bottom: 0.16rem;\n}\n.content-Mid-txt[data-v-f0f67cee] {\n  font-weight: 700;\n  font-size: 0.4rem;\n}\n.cbl-split[data-v-f0f67cee] {\n  margin-left: 0.05333rem;\n  margin-right: 0.05333rem;\n}\n.cbl-txt[data-v-f0f67cee],\n.cbr-txt[data-v-f0f67cee] {\n  font-size: 0.26667rem;\n  color: #a9a9a9;\n}\n", ""]);
 
 // exports
 
@@ -22549,6 +22549,10 @@ var _config = __webpack_require__(66);
 
 var _config2 = _interopRequireDefault(_config);
 
+var _mixins = __webpack_require__(67);
+
+var _mixins2 = _interopRequireDefault(_mixins);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -22589,16 +22593,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var stream = weex.requireModule("stream");
 var dom = weex.requireModule("dom");
 exports.default = {
+  mixins: [_mixins2.default],
   data: function data() {
     return {
       tabTitles: _config2.default.tabTitles,
       tabStyles: _config2.default.tabStyles,
       tabList: [],
-      itemList: ['-'],
+      itemList: ["-"],
       tabPageHeight: 1334,
       topicParams: {
         page: 0,
@@ -22633,12 +22648,18 @@ exports.default = {
 
       var self = this;
       var index = e.page;
-      /* Unloaded tab analog data request */
-      if (!_utils2.default.isNonEmptyArray(self.tabList[index])) {
-        setTimeout(function () {
+      var tabTitles = _config2.default.tabTitles;
+
+      this.reqTopic({
+        page: 1,
+        tab: tabTitles[index]["tab"],
+        limit: this.topicParams.limit
+      }, function () {
+        if (!_utils2.default.isNonEmptyArray(self.tabList[index])) {
           _this2.$set(self.tabList, index, self.itemList);
-        }, 100);
-      }
+        }
+      });
+      /* Unloaded tab analog data request */
     },
     wxcPanItemPan: function wxcPanItemPan(e) {
       if (_bindEnv2.default.supportsEBForAndroid()) {
@@ -22704,7 +22725,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }, [_c('wxc-pan-item', {
         attrs: {
           "ext-id": '1-' + (v) + '-' + (key),
-          "url": "https://h5.m.taobao.com/trip/ticket/detail/index.html?scenicId=2675",
+          "url": "/",
           "data-evt-wxcPanItemPan": ""
         },
         on: {
@@ -22759,12 +22780,57 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         attrs: {
           "weex-type": "div"
         }
-      }), _vm._v(" "), _c('div', {
+      }, [_c('p', {
+        staticClass: "content-Mid-txt weex-el weex-text",
+        attrs: {
+          "weex-type": "text"
+        }
+      }, [_vm._v(_vm._s(item.title))])]), _vm._v(" "), _c('div', {
         staticClass: "content-Bottom weex-ct weex-div",
         attrs: {
           "weex-type": "div"
         }
-      })])])], 1)
+      }, [_c('div', {
+        staticClass: "content-Bottom-left weex-ct weex-div",
+        attrs: {
+          "weex-type": "div"
+        }
+      }, [_c('p', {
+        staticClass: "cbl-txt weex-el weex-text",
+        attrs: {
+          "weex-type": "text"
+        }
+      }, [_vm._v(_vm._s(item.reply_count))]), _c('p', {
+        staticClass: "cbl-split cbl-txt weex-el weex-text",
+        attrs: {
+          "weex-type": "text"
+        }
+      }, [_vm._v("/")]), _c('p', {
+        staticClass: "cbl-txt weex-el weex-text",
+        attrs: {
+          "weex-type": "text"
+        }
+      }, [_vm._v(_vm._s(item.visit_count))]), _vm._v(" "), _c('p', {
+        staticClass: "cbl-split cbl-txt weex-el weex-text",
+        attrs: {
+          "weex-type": "text"
+        }
+      }, [_vm._v("•")]), _c('p', {
+        staticClass: "cbl-txt timeago weex-el weex-text",
+        attrs: {
+          "weex-type": "text"
+        }
+      }, [_vm._v(_vm._s(_vm._f("timeago")(item.last_reply_at)))])]), _vm._v(" "), _c('div', {
+        staticClass: "content-Bottom-right weex-ct weex-div",
+        attrs: {
+          "weex-type": "div"
+        }
+      }, [_c('p', {
+        staticClass: "cbr-txt weex-el weex-text",
+        attrs: {
+          "weex-type": "text"
+        }
+      }, [_vm._v(_vm._s(_vm._f("handleDate")(item.create_at)))])])])])])], 1)
     })], 2)
   }))
 },staticRenderFns: []}
@@ -25721,59 +25787,131 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.default = {
-  tabTitles: [{
-    title: "全部",
-    tab: '',
-    icon: "/",
-    activeIcon: "/"
-  }, {
-    title: "精华",
-    tab: 'good'
-  }, {
-    title: "分享",
-    tab: 'share'
-  }, {
-    title: "问答",
-    tab: 'ask'
-  }, {
-    title: "招聘",
-    tab: 'job'
-  }],
-  tabStyles: {
-    bgColor: "#026fff",
-    titleColor: "#eeeeee",
-    activeTitleColor: "#ffffff",
-    activeBgColor: "#026fff",
-    isActiveTitleBold: true,
-    iconWidth: 70,
-    iconHeight: 70,
-    width: 120,
-    height: 80,
-    fontSize: 24,
-    hasActiveBottom: true,
-    activeBottomColor: "#ffffff",
-    activeBottomHeight: 6,
-    activeBottomWidth: 120,
-    textPaddingLeft: 10,
-    textPaddingRight: 10
-  },
-  tabBar: [{
-    name: "首页",
-    image: "home.png",
-    router: "/"
-  }, {
-    name: "--",
-    image: "other.png",
-    router: "/"
-  }, {
-    name: "我的",
-    image: "own.png",
-    router: "/own"
-  }],
-  rootUrl: 'https://cnodejs.org/api/v1'
+    tabTitles: [{
+        title: "全部",
+        tab: '',
+        icon: "/",
+        activeIcon: "/"
+    }, {
+        title: "精华",
+        tab: 'good'
+    }, {
+        title: "分享",
+        tab: 'share'
+    }, {
+        title: "问答",
+        tab: 'ask'
+    }, {
+        title: "招聘",
+        tab: 'job'
+    }],
+    tabStyles: {
+        bgColor: "#026fff",
+        titleColor: "#eeeeee",
+        activeTitleColor: "#ffffff",
+        activeBgColor: "#026fff",
+        isActiveTitleBold: true,
+        iconWidth: 70,
+        iconHeight: 70,
+        width: 120,
+        height: 80,
+        fontSize: 24,
+        hasActiveBottom: true,
+        activeBottomColor: "#ffffff",
+        activeBottomHeight: 6,
+        activeBottomWidth: 120,
+        textPaddingLeft: 10,
+        textPaddingRight: 10
+    },
+    tabBar: [{
+        name: "首页",
+        image: "home.png",
+        router: "/"
+    }, {
+        name: "--",
+        image: "other.png",
+        router: "/"
+    }, {
+        name: "我的",
+        image: "own.png",
+        router: "/own"
+    }],
+    rootUrl: 'https://cnodejs.org/api/v1'
+};
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    data: function data() {
+        return {};
+    },
+    methods: {},
+    filters: {
+        handleDate: function handleDate() {
+            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";
+
+            var t = new Date(time);
+            return t.toISOString();
+        },
+        timeago: function timeago() {
+            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";
+            //dateTimeStamp是一个时间毫秒，注意时间戳是秒的形式，在这个毫秒的基础上除以1000，就是十位数的时间戳。13位数的都是时间毫秒。
+            var dateTimeStamp = new Date(time).getTime();
+            var result = "";
+            var minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
+            var hour = minute * 60;
+            var day = hour * 24;
+            var week = day * 7;
+            var halfamonth = day * 15;
+            var month = day * 30;
+            var now = new Date().getTime(); //获取当前时间毫秒
+            var diffValue = now - dateTimeStamp; //时间差
+
+            if (diffValue < 0) {
+                return;
+            }
+            var minC = diffValue / minute; //计算时间差的分，时，天，周，月
+            var hourC = diffValue / hour;
+            var dayC = diffValue / day;
+            var weekC = diffValue / week;
+            var monthC = diffValue / month;
+            if (monthC >= 1 && monthC <= 3) {
+                result = " " + parseInt(monthC) + "月前";
+            } else if (weekC >= 1 && weekC <= 3) {
+                result = " " + parseInt(weekC) + "周前";
+            } else if (dayC >= 1 && dayC <= 6) {
+                result = " " + parseInt(dayC) + "天前";
+            } else if (hourC >= 1 && hourC <= 23) {
+                result = " " + parseInt(hourC) + "小时前";
+            } else if (minC >= 1 && minC <= 59) {
+                result = " " + parseInt(minC) + "分钟前";
+            } else if (diffValue >= 0 && diffValue <= minute) {
+                result = "刚刚";
+            } else {
+                var datetime = new Date();
+                datetime.setTime(dateTimeStamp);
+                var Nyear = datetime.getFullYear();
+                var Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+                var Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+                var Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
+                var Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+                var Nsecond = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+                result = Nyear + "-" + Nmonth + "-" + Ndate;
+            }
+            return result;
+        }
+    }
 };
 
 /***/ })

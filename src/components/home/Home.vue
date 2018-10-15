@@ -14,7 +14,7 @@
             class="cell"
             :key="key">
         <wxc-pan-item :ext-id="'1-' + (v) + '-' + (key)"
-                      url="https://h5.m.taobao.com/trip/ticket/detail/index.html?scenicId=2675"
+                      url="/"
                       @wxcPanItemPan="wxcPanItemPan">
          <div class="content">
            <div class="content-Top">
@@ -26,8 +26,18 @@
                <text class="ct-r-txt">分类</text>
              </div>
            </div>
-           <div class="content-Mid"></div>
-           <div class="content-Bottom"></div>
+           <div class="content-Mid">
+             <text class="content-Mid-txt">{{item.title}}</text>
+           </div>
+           <div class="content-Bottom">
+             <div class="content-Bottom-left">
+               <text class="cbl-txt">{{item.reply_count}}</text><text class="cbl-split cbl-txt">/</text ><text class="cbl-txt">{{item.visit_count}}</text>
+               <text class="cbl-split cbl-txt">•</text ><text class="cbl-txt timeago">{{item.last_reply_at | timeago}}</text>
+             </div>
+             <div class="content-Bottom-right">
+               <text class="cbr-txt">{{item.create_at | handleDate}}</text>
+             </div>
+           </div>
          </div>
         </wxc-pan-item>
       </cell>
@@ -39,12 +49,14 @@ const stream = weex.requireModule("stream");
 const dom = weex.requireModule("dom");
 import { WxcTabPage, WxcPanItem, Utils, BindEnv } from "weex-ui";
 import Config from "../../config";
+import mixin from "../../mixins";
 export default {
+  mixins: [mixin],
   data: () => ({
     tabTitles: Config.tabTitles,
     tabStyles: Config.tabStyles,
     tabList: [],
-    itemList: ['-'],
+    itemList: ["-"],
     tabPageHeight: 1334,
     topicParams: {
       page: 0,
@@ -57,45 +69,53 @@ export default {
     this.tabPageHeight = Utils.env.getPageHeight();
     //创建二维数组
     this.tabList = [...Array(this.tabTitles.length).keys()].map(i => []);
-    this.reqTopic({
-      page:1,
-      tab:this.topicParams.tab,
-      limit:this.topicParams.limit
-    },()=>{
-      this.$set(this.tabList, 0, this.itemList);
-      console.log(this.itemList)
-    });
-
+    this.reqTopic(
+      {
+        page: 1,
+        tab: this.topicParams.tab,
+        limit: this.topicParams.limit
+      },
+      () => {
+        this.$set(this.tabList, 0, this.itemList);
+        console.log(this.itemList);
+      }
+    );
   },
   mounted() {},
   methods: {
     wxcTabPageCurrentTabSelected(e) {
       const self = this;
       const index = e.page;
+      const { tabTitles } = Config;
+      this.reqTopic(
+        {
+          page: 1,
+          tab: tabTitles[index]["tab"],
+          limit: this.topicParams.limit
+        },
+        () => {
+          if (!Utils.isNonEmptyArray(self.tabList[index])) {
+              this.$set(self.tabList, index, self.itemList);
+          }
+        }
+      );
       /* Unloaded tab analog data request */
-      if (!Utils.isNonEmptyArray(self.tabList[index])) {
-        setTimeout(() => {
-          this.$set(self.tabList, index, self.itemList);
-        }, 100);
-      }
     },
     wxcPanItemPan(e) {
       if (BindEnv.supportsEBForAndroid()) {
         this.$refs["wxc-tab-page"].bindExp(e.element);
       }
     },
-    reqTopic(opt,call) {
-      let {page,tab,limit}=opt
+    reqTopic(opt, call) {
+      let { page, tab, limit } = opt;
       stream.fetch(
         {
           method: "GET",
-          url: `${
-            Config.rootUrl
-          }/topics?page=${page}&tab=${tab}&limit=${limit}`
+          url: `${Config.rootUrl}/topics?page=${page}&tab=${tab}&limit=${limit}`
         },
         res => {
           this.itemList = JSON.parse(res.data).data;
-          call && call()
+          call && call();
         },
         err => {}
       );
@@ -106,7 +126,13 @@ export default {
 </script>
 <style scoped lang="scss">
 $pd10: 20px;
-$pdtxt:10px;
+$pdtxt: 10px;
+.com-padding {
+  padding-top: $pd10;
+  padding-bottom: $pd10;
+  padding-left: $pd10;
+  padding-right: $pd10;
+}
 .home_nav {
   position: fixed;
   top: 0;
@@ -120,13 +146,9 @@ $pdtxt:10px;
 .home_nav_text {
   color: #eeeeee;
   font-size: 30px;
-  padding-top: $pd10;
-  padding-bottom: $pd10;
-  padding-left: $pd10;
-  padding-right: $pd10;
+  @extend .com-padding;
   // border-bottom-width:2px;
 }
-
 .border-cell {
   background-color: #f2f3f4;
   width: 750px;
@@ -137,37 +159,48 @@ $pdtxt:10px;
   border-style: solid;
   border-color: #e0e0e0;
 }
-
-.cell {
-}
-
 .content {
   width: 750px;
-  height: 300px;
-  padding-top: $pd10;
-  padding-bottom: $pd10;
-  padding-left: $pd10;
-  padding-right: $pd10;
+  @extend .com-padding;
   background-color: #ffffff;
   margin-bottom: 24px;
 }
-.content-Top{
+.content-Top,
+.content-Bottom,
+.content-Bottom-left {
   flex-direction: row;
-  justify-content:space-between;
+  justify-content: space-between;
 }
-.ct-left{
+.ct-left {
   flex-direction: row;
 }
-.ct-left-txt{
-  margin-left:10px;
+.ct-left-txt {
+  margin-left: 10px;
 }
-.ct-left-img{
-  width:40px;
+.ct-left-img {
+  width: 40px;
   height: 40px;
   border-radius: 100%;
 }
-.ct-r-txt{
-  color:#A29898;
+.ct-r-txt {
+  color: #a29898;
   font-size: 24px;
+}
+.content-Mid {
+  margin-top: 26px;
+  margin-bottom: 12px;
+}
+.content-Mid-txt {
+  font-weight: 700;
+  font-size: 30px;
+}
+.cbl-split {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.cbl-txt,
+.cbr-txt {
+  font-size: 20px;
+  color: #a9a9a9;
 }
 </style>

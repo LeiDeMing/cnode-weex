@@ -2797,6 +2797,29 @@ module.exports = __vue_exports__
 /***/ (function(module, exports) {
 
 module.exports = {
+  "com-padding": {
+    "paddingTop": "20",
+    "paddingBottom": "20",
+    "paddingLeft": "20",
+    "paddingRight": "20"
+  },
+  "home_nav_text": {
+    "paddingTop": "20",
+    "paddingBottom": "20",
+    "paddingLeft": "20",
+    "paddingRight": "20",
+    "color": "#eeeeee",
+    "fontSize": "30"
+  },
+  "content": {
+    "paddingTop": "20",
+    "paddingBottom": "20",
+    "paddingLeft": "20",
+    "paddingRight": "20",
+    "width": "750",
+    "backgroundColor": "#ffffff",
+    "marginBottom": "24"
+  },
   "home_nav": {
     "position": "fixed",
     "top": 0,
@@ -2806,14 +2829,6 @@ module.exports = {
     "fontSize": "80",
     "backgroundColor": "#026fff",
     "paddingLeft": "20"
-  },
-  "home_nav_text": {
-    "color": "#eeeeee",
-    "fontSize": "30",
-    "paddingTop": "20",
-    "paddingBottom": "20",
-    "paddingLeft": "20",
-    "paddingRight": "20"
   },
   "border-cell": {
     "backgroundColor": "#f2f3f4",
@@ -2825,17 +2840,15 @@ module.exports = {
     "borderStyle": "solid",
     "borderColor": "#e0e0e0"
   },
-  "content": {
-    "width": "750",
-    "height": "300",
-    "paddingTop": "20",
-    "paddingBottom": "20",
-    "paddingLeft": "20",
-    "paddingRight": "20",
-    "backgroundColor": "#ffffff",
-    "marginBottom": "24"
-  },
   "content-Top": {
+    "flexDirection": "row",
+    "justifyContent": "space-between"
+  },
+  "content-Bottom": {
+    "flexDirection": "row",
+    "justifyContent": "space-between"
+  },
+  "content-Bottom-left": {
     "flexDirection": "row",
     "justifyContent": "space-between"
   },
@@ -2851,8 +2864,28 @@ module.exports = {
     "borderRadius": 100
   },
   "ct-r-txt": {
-    "color": "#A29898",
+    "color": "#a29898",
     "fontSize": "24"
+  },
+  "content-Mid": {
+    "marginTop": "26",
+    "marginBottom": "12"
+  },
+  "content-Mid-txt": {
+    "fontWeight": "700",
+    "fontSize": "30"
+  },
+  "cbl-split": {
+    "marginLeft": "4",
+    "marginRight": "4"
+  },
+  "cbl-txt": {
+    "fontSize": "20",
+    "color": "#a9a9a9"
+  },
+  "cbr-txt": {
+    "fontSize": "20",
+    "color": "#a9a9a9"
   }
 }
 
@@ -2886,6 +2919,10 @@ var _utils2 = _interopRequireDefault(_utils);
 var _config = __webpack_require__(47);
 
 var _config2 = _interopRequireDefault(_config);
+
+var _mixins = __webpack_require__(48);
+
+var _mixins2 = _interopRequireDefault(_mixins);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2927,16 +2964,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var stream = weex.requireModule("stream");
 var dom = weex.requireModule("dom");
 exports.default = {
+  mixins: [_mixins2.default],
   data: function data() {
     return {
       tabTitles: _config2.default.tabTitles,
       tabStyles: _config2.default.tabStyles,
       tabList: [],
-      itemList: ['-'],
+      itemList: ["-"],
       tabPageHeight: 1334,
       topicParams: {
         page: 0,
@@ -2971,12 +3019,18 @@ exports.default = {
 
       var self = this;
       var index = e.page;
-      /* Unloaded tab analog data request */
-      if (!_utils2.default.isNonEmptyArray(self.tabList[index])) {
-        setTimeout(function () {
+      var tabTitles = _config2.default.tabTitles;
+
+      this.reqTopic({
+        page: 1,
+        tab: tabTitles[index]["tab"],
+        limit: this.topicParams.limit
+      }, function () {
+        if (!_utils2.default.isNonEmptyArray(self.tabList[index])) {
           _this2.$set(self.tabList, index, self.itemList);
-        }, 100);
-      }
+        }
+      });
+      /* Unloaded tab analog data request */
     },
     wxcPanItemPan: function wxcPanItemPan(e) {
       if (_bindEnv2.default.supportsEBForAndroid()) {
@@ -3042,7 +3096,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }, [_c('wxc-pan-item', {
         attrs: {
           "extId": '1-' + (v) + '-' + (key),
-          "url": "https://h5.m.taobao.com/trip/ticket/detail/index.html?scenicId=2675"
+          "url": "/"
         },
         on: {
           "wxcPanItemPan": _vm.wxcPanItemPan
@@ -3067,9 +3121,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         staticClass: ["ct-r-txt"]
       }, [_vm._v("分类")])])]), _c('div', {
         staticClass: ["content-Mid"]
-      }), _c('div', {
+      }, [_c('text', {
+        staticClass: ["content-Mid-txt"]
+      }, [_vm._v(_vm._s(item.title))])]), _c('div', {
         staticClass: ["content-Bottom"]
-      })])])], 1)
+      }, [_c('div', {
+        staticClass: ["content-Bottom-left"]
+      }, [_c('text', {
+        staticClass: ["cbl-txt"]
+      }, [_vm._v(_vm._s(item.reply_count))]), _c('text', {
+        staticClass: ["cbl-split", "cbl-txt"]
+      }, [_vm._v("/")]), _c('text', {
+        staticClass: ["cbl-txt"]
+      }, [_vm._v(_vm._s(item.visit_count))]), _c('text', {
+        staticClass: ["cbl-split", "cbl-txt"]
+      }, [_vm._v("•")]), _c('text', {
+        staticClass: ["cbl-txt", "timeago"]
+      }, [_vm._v(_vm._s(_vm._f("timeago")(item.last_reply_at)))])]), _c('div', {
+        staticClass: ["content-Bottom-right"]
+      }, [_c('text', {
+        staticClass: ["cbr-txt"]
+      }, [_vm._v(_vm._s(_vm._f("handleDate")(item.create_at)))])])])])])], 1)
     })], 2)
   }))
 },staticRenderFns: []}
@@ -5864,59 +5936,131 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.default = {
-  tabTitles: [{
-    title: "全部",
-    tab: '',
-    icon: "/",
-    activeIcon: "/"
-  }, {
-    title: "精华",
-    tab: 'good'
-  }, {
-    title: "分享",
-    tab: 'share'
-  }, {
-    title: "问答",
-    tab: 'ask'
-  }, {
-    title: "招聘",
-    tab: 'job'
-  }],
-  tabStyles: {
-    bgColor: "#026fff",
-    titleColor: "#eeeeee",
-    activeTitleColor: "#ffffff",
-    activeBgColor: "#026fff",
-    isActiveTitleBold: true,
-    iconWidth: 70,
-    iconHeight: 70,
-    width: 120,
-    height: 80,
-    fontSize: 24,
-    hasActiveBottom: true,
-    activeBottomColor: "#ffffff",
-    activeBottomHeight: 6,
-    activeBottomWidth: 120,
-    textPaddingLeft: 10,
-    textPaddingRight: 10
-  },
-  tabBar: [{
-    name: "首页",
-    image: "home.png",
-    router: "/"
-  }, {
-    name: "--",
-    image: "other.png",
-    router: "/"
-  }, {
-    name: "我的",
-    image: "own.png",
-    router: "/own"
-  }],
-  rootUrl: 'https://cnodejs.org/api/v1'
+    tabTitles: [{
+        title: "全部",
+        tab: '',
+        icon: "/",
+        activeIcon: "/"
+    }, {
+        title: "精华",
+        tab: 'good'
+    }, {
+        title: "分享",
+        tab: 'share'
+    }, {
+        title: "问答",
+        tab: 'ask'
+    }, {
+        title: "招聘",
+        tab: 'job'
+    }],
+    tabStyles: {
+        bgColor: "#026fff",
+        titleColor: "#eeeeee",
+        activeTitleColor: "#ffffff",
+        activeBgColor: "#026fff",
+        isActiveTitleBold: true,
+        iconWidth: 70,
+        iconHeight: 70,
+        width: 120,
+        height: 80,
+        fontSize: 24,
+        hasActiveBottom: true,
+        activeBottomColor: "#ffffff",
+        activeBottomHeight: 6,
+        activeBottomWidth: 120,
+        textPaddingLeft: 10,
+        textPaddingRight: 10
+    },
+    tabBar: [{
+        name: "首页",
+        image: "home.png",
+        router: "/"
+    }, {
+        name: "--",
+        image: "other.png",
+        router: "/"
+    }, {
+        name: "我的",
+        image: "own.png",
+        router: "/own"
+    }],
+    rootUrl: 'https://cnodejs.org/api/v1'
+};
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    data: function data() {
+        return {};
+    },
+    methods: {},
+    filters: {
+        handleDate: function handleDate() {
+            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";
+
+            var t = new Date(time);
+            return t.toISOString();
+        },
+        timeago: function timeago() {
+            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";
+            //dateTimeStamp是一个时间毫秒，注意时间戳是秒的形式，在这个毫秒的基础上除以1000，就是十位数的时间戳。13位数的都是时间毫秒。
+            var dateTimeStamp = new Date(time).getTime();
+            var result = "";
+            var minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
+            var hour = minute * 60;
+            var day = hour * 24;
+            var week = day * 7;
+            var halfamonth = day * 15;
+            var month = day * 30;
+            var now = new Date().getTime(); //获取当前时间毫秒
+            var diffValue = now - dateTimeStamp; //时间差
+
+            if (diffValue < 0) {
+                return;
+            }
+            var minC = diffValue / minute; //计算时间差的分，时，天，周，月
+            var hourC = diffValue / hour;
+            var dayC = diffValue / day;
+            var weekC = diffValue / week;
+            var monthC = diffValue / month;
+            if (monthC >= 1 && monthC <= 3) {
+                result = " " + parseInt(monthC) + "月前";
+            } else if (weekC >= 1 && weekC <= 3) {
+                result = " " + parseInt(weekC) + "周前";
+            } else if (dayC >= 1 && dayC <= 6) {
+                result = " " + parseInt(dayC) + "天前";
+            } else if (hourC >= 1 && hourC <= 23) {
+                result = " " + parseInt(hourC) + "小时前";
+            } else if (minC >= 1 && minC <= 59) {
+                result = " " + parseInt(minC) + "分钟前";
+            } else if (diffValue >= 0 && diffValue <= minute) {
+                result = "刚刚";
+            } else {
+                var datetime = new Date();
+                datetime.setTime(dateTimeStamp);
+                var Nyear = datetime.getFullYear();
+                var Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+                var Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+                var Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
+                var Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+                var Nsecond = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+                result = Nyear + "-" + Nmonth + "-" + Ndate;
+            }
+            return result;
+        }
+    }
 };
 
 /***/ })
