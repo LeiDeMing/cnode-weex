@@ -1,56 +1,110 @@
 <template>
-  <div>
-    <div class="home_nav">
-      <div class="home_nav_item"  v-for="(item,key) in home_nav" :key="key">
-        <text class="home_nav_text">{{item.name}}</text>
-      </div>
-    </div>
-  </div>
+  <wxc-tab-page ref="wxc-tab-page"
+                :tab-titles="tabTitles"
+                :tab-styles="tabStyles"
+                title-type="text"
+                :tab-page-height="tabPageHeight"
+                @wxcTabPageCurrentTabSelected="wxcTabPageCurrentTabSelected">
+    <list v-for="(v,index) in tabList"
+          :key="index"
+          class="item-container"
+          :style="{ height: (tabPageHeight - tabStyles.height) + 'px' }">
+      <cell class="border-cell"></cell>
+      <cell v-for="(demo,key) in v"
+            class="cell"
+            :key="key">
+        <wxc-pan-item :ext-id="'1-' + (v) + '-' + (key)"
+                      url="https://h5.m.taobao.com/trip/ticket/detail/index.html?scenicId=2675"
+                      @wxcPanItemPan="wxcPanItemPan">
+         <div class="content">
+            <text>{{key}}</text>
+         </div>
+        </wxc-pan-item>
+      </cell>
+    </list>
+  </wxc-tab-page>
 </template>
 <script>
+const dom = weex.requireModule("dom");
+import { WxcTabPage, WxcPanItem, Utils, BindEnv } from "weex-ui";
+import Config from "../../config";
 export default {
-  data () {
-    return {
-      home_nav: [
-        {
-          name: '全部'
-        },
-        {
-          name: '精华'
-        },
-        {
-          name: '分享'
-        },
-        {
-          name: '问答'
-        },
-        {
-          name: '招聘'
-        }
-      ]
+  data: () => ({
+    tabTitles: Config.tabTitles,
+    tabStyles: Config.tabStyles,
+    tabList: [],
+    demoList: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    tabPageHeight: 1334
+  }),
+  created() {
+    this.tabPageHeight = Utils.env.getPageHeight();
+    //创建二维数组
+    this.tabList = [...Array(this.tabTitles.length).keys()].map(i => []);
+    this.$set(this.tabList, 0, this.demoList);
+  },
+  mounted() {},
+  methods: {
+    wxcTabPageCurrentTabSelected(e) {
+      const self = this;
+      const index = e.page;
+      /* Unloaded tab analog data request */
+      if (!Utils.isNonEmptyArray(self.tabList[index])) {
+        setTimeout(() => {
+          this.$set(self.tabList, index, self.demoList);
+        }, 100);
+      }
+    },
+    wxcPanItemPan(e) {
+      if (BindEnv.supportsEBForAndroid()) {
+        this.$refs["wxc-tab-page"].bindExp(e.element);
+      }
     }
-  }
-}
+  },
+  components: { WxcTabPage, WxcPanItem }
+};
 </script>
 <style scoped lang="scss">
-$pd10:20px;
-  .home_nav{
-    position: fixed;
-    top:0;
-    left:0;
-    flex-direction: row;
-    width:750px;
-    font-size:80px;
-    background-color: #026FFF;
-    padding-left:20px;
-  }
-  .home_nav_text{
-    color:#eeeeee;
-    font-size:30px;
-    padding-top:$pd10;
-    padding-bottom:$pd10;
-    padding-left:$pd10;
-    padding-right:$pd10;
-    // border-bottom-width:2px;
-  }
+$pd10: 20px;
+.home_nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  flex-direction: row;
+  width: 750px;
+  font-size: 80px;
+  background-color: #026fff;
+  padding-left: 20px;
+}
+.home_nav_text {
+  color: #eeeeee;
+  font-size: 30px;
+  padding-top: $pd10;
+  padding-bottom: $pd10;
+  padding-left: $pd10;
+  padding-right: $pd10;
+  // border-bottom-width:2px;
+}
+
+.border-cell {
+  background-color: #f2f3f4;
+  width: 750px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border-bottom-width: 1px;
+  border-style: solid;
+  border-color: #e0e0e0;
+}
+
+.cell {
+  background-color: #ffffff;
+}
+
+.content {
+  width: 750px;
+  height: 300px;
+  border-bottom-width: 1px;
+  align-items: center;
+  justify-content: center;
+}
 </style>

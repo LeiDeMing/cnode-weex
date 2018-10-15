@@ -7,50 +7,23 @@
         <image class="navBarImg" :src="urlImg+item.image"></image>
         <text class="navBarText">{{item.name}}</text>
       </div>
-    </div>
+    </div>    
   </div>
 </template>
-
 <script>
-var navigator = weex.requireModule("navigator");
+import Config from './config'
 export default {
   name: "App",
-  data() {
-    return {
-      urlImg: "http://52xuanxuan.com:3000/images/",
-      tabBar: [
-        {
-          name: "首页",
-          image: "home.png",
-          router: "/"
-        },
-        {
-          name: "--",
-          image: "other.png",
-          router: "/"
-        },
-        {
-          name: "我的",
-          image: "own.png",
-          router: "/own"
-        }
-      ]
-    };
-  },
+  data: () => ({
+    tabBar:Config.tabBar,
+    urlImg: "http://52xuanxuan.com:3000/images/"
+  }),
   created() {
+    
   },
   methods: {
     jump(r) {
-      // this.$router.push(r)
-      navigator.push(
-        {
-          url: "http://172.16.162.114:8081/weex/own.js",
-          animated: "true"
-        },
-        event => {
-          modal.toast({ message: "callback: " + event });
-        }
-      );
+      this.$router.push(r);
     }
   }
 };
@@ -87,4 +60,11 @@ $wh50: 34px;
   flex: 1;
   align-items: center;
 }
+
+.item-container {
+  width: 750px;
+  background-color: #f2f3f4;
+}
+
+
 </style>
