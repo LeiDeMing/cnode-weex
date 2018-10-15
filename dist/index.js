@@ -2825,15 +2825,34 @@ module.exports = {
     "borderStyle": "solid",
     "borderColor": "#e0e0e0"
   },
-  "cell": {
-    "backgroundColor": "#ffffff"
-  },
   "content": {
     "width": "750",
     "height": "300",
-    "borderBottomWidth": "1",
-    "alignItems": "center",
-    "justifyContent": "center"
+    "paddingTop": "20",
+    "paddingBottom": "20",
+    "paddingLeft": "20",
+    "paddingRight": "20",
+    "backgroundColor": "#ffffff",
+    "marginBottom": "24"
+  },
+  "content-Top": {
+    "flexDirection": "row",
+    "justifyContent": "space-between"
+  },
+  "ct-left": {
+    "flexDirection": "row"
+  },
+  "ct-left-txt": {
+    "marginLeft": "10"
+  },
+  "ct-left-img": {
+    "width": "40",
+    "height": "40",
+    "borderRadius": 100
+  },
+  "ct-r-txt": {
+    "color": "#A29898",
+    "fontSize": "24"
   }
 }
 
@@ -2898,7 +2917,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+var stream = weex.requireModule("stream");
 var dom = weex.requireModule("dom");
 exports.default = {
   data: function data() {
@@ -2906,30 +2936,45 @@ exports.default = {
       tabTitles: _config2.default.tabTitles,
       tabStyles: _config2.default.tabStyles,
       tabList: [],
-      demoList: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      tabPageHeight: 1334
+      itemList: ['-'],
+      tabPageHeight: 1334,
+      topicParams: {
+        page: 0,
+        tab: "good",
+        limit: 10,
+        mdrender: "true"
+      }
     };
   },
   created: function created() {
+    var _this = this;
+
     this.tabPageHeight = _utils2.default.env.getPageHeight();
     //创建二维数组
     this.tabList = [].concat(_toConsumableArray(Array(this.tabTitles.length).keys())).map(function (i) {
       return [];
     });
-    this.$set(this.tabList, 0, this.demoList);
+    this.reqTopic({
+      page: 1,
+      tab: this.topicParams.tab,
+      limit: this.topicParams.limit
+    }, function () {
+      _this.$set(_this.tabList, 0, _this.itemList);
+      console.log(_this.itemList);
+    });
   },
   mounted: function mounted() {},
 
   methods: {
     wxcTabPageCurrentTabSelected: function wxcTabPageCurrentTabSelected(e) {
-      var _this = this;
+      var _this2 = this;
 
       var self = this;
       var index = e.page;
       /* Unloaded tab analog data request */
       if (!_utils2.default.isNonEmptyArray(self.tabList[index])) {
         setTimeout(function () {
-          _this.$set(self.tabList, index, self.demoList);
+          _this2.$set(self.tabList, index, self.itemList);
         }, 100);
       }
     },
@@ -2937,6 +2982,21 @@ exports.default = {
       if (_bindEnv2.default.supportsEBForAndroid()) {
         this.$refs["wxc-tab-page"].bindExp(e.element);
       }
+    },
+    reqTopic: function reqTopic(opt, call) {
+      var _this3 = this;
+
+      var page = opt.page,
+          tab = opt.tab,
+          limit = opt.limit;
+
+      stream.fetch({
+        method: "GET",
+        url: _config2.default.rootUrl + "/topics?page=" + page + "&tab=" + tab + "&limit=" + limit
+      }, function (res) {
+        _this3.itemList = JSON.parse(res.data).data;
+        call && call();
+      }, function (err) {});
     }
   },
   components: { WxcTabPage: _wxcTabPage2.default, WxcPanItem: _wxcPanItem2.default }
@@ -2971,7 +3031,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "append": "tree"
       }
-    }), _vm._l((v), function(demo, key) {
+    }), _vm._l((v), function(item, key) {
       return _c('cell', {
         key: key,
         staticClass: ["cell"],
@@ -2989,7 +3049,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }, [_c('div', {
         staticClass: ["content"]
-      }, [_c('text', [_vm._v(_vm._s(key))])])])], 1)
+      }, [_c('div', {
+        staticClass: ["content-Top"]
+      }, [_c('div', {
+        staticClass: ["ct-left"]
+      }, [_c('image', {
+        staticClass: ["ct-left-img"],
+        attrs: {
+          "resize": "cover",
+          "src": item.author.avatar_url
+        }
+      }), _c('text', {
+        staticClass: ["ct-left-txt"]
+      }, [_vm._v(_vm._s(item.author.loginname))])]), _c('div', {
+        staticClass: ["ct-right"]
+      }, [_c('text', {
+        staticClass: ["ct-r-txt"]
+      }, [_vm._v("分类")])])]), _c('div', {
+        staticClass: ["content-Mid"]
+      }), _c('div', {
+        staticClass: ["content-Bottom"]
+      })])])], 1)
     })], 2)
   }))
 },staticRenderFns: []}
@@ -5789,16 +5869,21 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
   tabTitles: [{
     title: "全部",
+    tab: '',
     icon: "/",
     activeIcon: "/"
   }, {
-    title: "精华"
+    title: "精华",
+    tab: 'good'
   }, {
-    title: "分享"
+    title: "分享",
+    tab: 'share'
   }, {
-    title: "问答"
+    title: "问答",
+    tab: 'ask'
   }, {
-    title: "招聘"
+    title: "招聘",
+    tab: 'job'
   }],
   tabStyles: {
     bgColor: "#026fff",
@@ -5830,7 +5915,8 @@ exports.default = {
     name: "我的",
     image: "own.png",
     router: "/own"
-  }]
+  }],
+  rootUrl: 'https://cnodejs.org/api/v1'
 };
 
 /***/ })

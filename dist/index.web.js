@@ -22480,7 +22480,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n.home_nav[data-v-f0f67cee] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  flex-direction: row;\n  width: 10rem;\n  font-size: 1.06667rem;\n  background-color: #026fff;\n  padding-left: 0.26667rem;\n}\n.home_nav_text[data-v-f0f67cee] {\n  color: #eeeeee;\n  font-size: 0.4rem;\n  padding-top: 0.26667rem;\n  padding-bottom: 0.26667rem;\n  padding-left: 0.26667rem;\n  padding-right: 0.26667rem;\n}\n.border-cell[data-v-f0f67cee] {\n  background-color: #f2f3f4;\n  width: 10rem;\n  height: 0.32rem;\n  align-items: center;\n  justify-content: center;\n  border-bottom-width: 1px;\n  border-style: solid;\n  border-color: #e0e0e0;\n}\n.cell[data-v-f0f67cee] {\n  background-color: #ffffff;\n}\n.content[data-v-f0f67cee] {\n  width: 10rem;\n  height: 4rem;\n  border-bottom-width: 1px;\n  align-items: center;\n  justify-content: center;\n}\n", ""]);
+exports.push([module.i, "\n.home_nav[data-v-f0f67cee] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  flex-direction: row;\n  width: 10rem;\n  font-size: 1.06667rem;\n  background-color: #026fff;\n  padding-left: 0.26667rem;\n}\n.home_nav_text[data-v-f0f67cee] {\n  color: #eeeeee;\n  font-size: 0.4rem;\n  padding-top: 0.26667rem;\n  padding-bottom: 0.26667rem;\n  padding-left: 0.26667rem;\n  padding-right: 0.26667rem;\n}\n.border-cell[data-v-f0f67cee] {\n  background-color: #f2f3f4;\n  width: 10rem;\n  height: 0.32rem;\n  align-items: center;\n  justify-content: center;\n  border-bottom-width: 1px;\n  border-style: solid;\n  border-color: #e0e0e0;\n}\n.content[data-v-f0f67cee] {\n  width: 10rem;\n  height: 4rem;\n  padding-top: 0.26667rem;\n  padding-bottom: 0.26667rem;\n  padding-left: 0.26667rem;\n  padding-right: 0.26667rem;\n  background-color: #ffffff;\n  margin-bottom: 0.32rem;\n}\n.content-Top[data-v-f0f67cee] {\n  flex-direction: row;\n  justify-content: space-between;\n}\n.ct-left[data-v-f0f67cee] {\n  flex-direction: row;\n}\n.ct-left-txt[data-v-f0f67cee] {\n  margin-left: 0.13333rem;\n}\n.ct-left-img[data-v-f0f67cee] {\n  width: 0.53333rem;\n  height: 0.53333rem;\n  border-radius: 100%;\n}\n.ct-r-txt[data-v-f0f67cee] {\n  color: #A29898;\n  font-size: 0.32rem;\n}\n", ""]);
 
 // exports
 
@@ -22579,7 +22579,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+var stream = weex.requireModule("stream");
 var dom = weex.requireModule("dom");
 exports.default = {
   data: function data() {
@@ -22587,30 +22598,45 @@ exports.default = {
       tabTitles: _config2.default.tabTitles,
       tabStyles: _config2.default.tabStyles,
       tabList: [],
-      demoList: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      tabPageHeight: 1334
+      itemList: ['-'],
+      tabPageHeight: 1334,
+      topicParams: {
+        page: 0,
+        tab: "good",
+        limit: 10,
+        mdrender: "true"
+      }
     };
   },
   created: function created() {
+    var _this = this;
+
     this.tabPageHeight = _utils2.default.env.getPageHeight();
     //创建二维数组
     this.tabList = [].concat(_toConsumableArray(Array(this.tabTitles.length).keys())).map(function (i) {
       return [];
     });
-    this.$set(this.tabList, 0, this.demoList);
+    this.reqTopic({
+      page: 1,
+      tab: this.topicParams.tab,
+      limit: this.topicParams.limit
+    }, function () {
+      _this.$set(_this.tabList, 0, _this.itemList);
+      console.log(_this.itemList);
+    });
   },
   mounted: function mounted() {},
 
   methods: {
     wxcTabPageCurrentTabSelected: function wxcTabPageCurrentTabSelected(e) {
-      var _this = this;
+      var _this2 = this;
 
       var self = this;
       var index = e.page;
       /* Unloaded tab analog data request */
       if (!_utils2.default.isNonEmptyArray(self.tabList[index])) {
         setTimeout(function () {
-          _this.$set(self.tabList, index, self.demoList);
+          _this2.$set(self.tabList, index, self.itemList);
         }, 100);
       }
     },
@@ -22618,6 +22644,21 @@ exports.default = {
       if (_bindEnv2.default.supportsEBForAndroid()) {
         this.$refs["wxc-tab-page"].bindExp(e.element);
       }
+    },
+    reqTopic: function reqTopic(opt, call) {
+      var _this3 = this;
+
+      var page = opt.page,
+          tab = opt.tab,
+          limit = opt.limit;
+
+      stream.fetch({
+        method: "GET",
+        url: _config2.default.rootUrl + "/topics?page=" + page + "&tab=" + tab + "&limit=" + limit
+      }, function (res) {
+        _this3.itemList = JSON.parse(res.data).data;
+        call && call();
+      }, function (err) {});
     }
   },
   components: { WxcTabPage: _wxcTabPage2.default, WxcPanItem: _wxcPanItem2.default }
@@ -22653,7 +22694,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "weex-type": "cell"
       }
-    }), _vm._v(" "), _vm._l((v), function(demo, key) {
+    }), _vm._v(" "), _vm._l((v), function(item, key) {
       return _c('section', {
         key: key,
         staticClass: "cell weex-ct weex-cell",
@@ -22674,12 +22715,56 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         attrs: {
           "weex-type": "div"
         }
-      }, [_c('p', {
-        staticClass: " weex-el weex-text",
+      }, [_c('div', {
+        staticClass: "content-Top weex-ct weex-div",
+        attrs: {
+          "weex-type": "div"
+        }
+      }, [_c('div', {
+        staticClass: "ct-left weex-ct weex-div",
+        attrs: {
+          "weex-type": "div"
+        }
+      }, [_c('figure', {
+        directives: [{
+          name: "weex-resize",
+          rawName: "v-weex-resize",
+          value: ("cover"),
+          expression: "\"cover\""
+        }],
+        staticClass: "ct-left-img weex-el weex-image",
+        attrs: {
+          "resize": "cover",
+          "src": item.author.avatar_url,
+          "data-img-src": item.author.avatar_url,
+          "weex-type": "image"
+        }
+      }), _vm._v(" "), _c('p', {
+        staticClass: "ct-left-txt weex-el weex-text",
         attrs: {
           "weex-type": "text"
         }
-      }, [_vm._v(_vm._s(key))])])])], 1)
+      }, [_vm._v(_vm._s(item.author.loginname))])]), _vm._v(" "), _c('div', {
+        staticClass: "ct-right weex-ct weex-div",
+        attrs: {
+          "weex-type": "div"
+        }
+      }, [_c('p', {
+        staticClass: "ct-r-txt weex-el weex-text",
+        attrs: {
+          "weex-type": "text"
+        }
+      }, [_vm._v("分类")])])]), _vm._v(" "), _c('div', {
+        staticClass: "content-Mid weex-ct weex-div",
+        attrs: {
+          "weex-type": "div"
+        }
+      }), _vm._v(" "), _c('div', {
+        staticClass: "content-Bottom weex-ct weex-div",
+        attrs: {
+          "weex-type": "div"
+        }
+      })])])], 1)
     })], 2)
   }))
 },staticRenderFns: []}
@@ -25641,16 +25726,21 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
   tabTitles: [{
     title: "全部",
+    tab: '',
     icon: "/",
     activeIcon: "/"
   }, {
-    title: "精华"
+    title: "精华",
+    tab: 'good'
   }, {
-    title: "分享"
+    title: "分享",
+    tab: 'share'
   }, {
-    title: "问答"
+    title: "问答",
+    tab: 'ask'
   }, {
-    title: "招聘"
+    title: "招聘",
+    tab: 'job'
   }],
   tabStyles: {
     bgColor: "#026fff",
@@ -25682,7 +25772,8 @@ exports.default = {
     name: "我的",
     image: "own.png",
     router: "/own"
-  }]
+  }],
+  rootUrl: 'https://cnodejs.org/api/v1'
 };
 
 /***/ })

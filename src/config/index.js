@@ -2,21 +2,26 @@ export default{
     tabTitles: [
         {
           title: "全部",
+          tab:'',
           icon: "/",
           activeIcon:
             "/"
         },
         {
-          title: "精华"
+          title: "精华",
+          tab:'good'
         },
         {
-          title: "分享"
+          title: "分享",
+          tab:'share'
         },
         {
-          title: "问答"
+          title: "问答",
+          tab:'ask'
         },
         {
-          title: "招聘"
+          title: "招聘",
+          tab:'job'
         }
       ],
       tabStyles: {
@@ -53,5 +58,6 @@ export default{
           image: "own.png",
           router: "/own"
         }
-      ]
+      ],
+      rootUrl:'https://cnodejs.org/api/v1'
 }

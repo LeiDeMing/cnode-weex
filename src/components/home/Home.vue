@@ -10,14 +10,24 @@
           class="item-container"
           :style="{ height: (tabPageHeight - tabStyles.height) + 'px' }">
       <cell class="border-cell"></cell>
-      <cell v-for="(demo,key) in v"
+      <cell v-for="(item,key) in v"
             class="cell"
             :key="key">
         <wxc-pan-item :ext-id="'1-' + (v) + '-' + (key)"
                       url="https://h5.m.taobao.com/trip/ticket/detail/index.html?scenicId=2675"
                       @wxcPanItemPan="wxcPanItemPan">
          <div class="content">
-            <text>{{key}}</text>
+           <div class="content-Top">
+             <div class="ct-left">
+               <image class="ct-left-img" resize="cover" :src="item.author.avatar_url"></image>
+               <text class="ct-left-txt">{{item.author.loginname}}</text>
+             </div>
+             <div class="ct-right">
+               <text class="ct-r-txt">分类</text>
+             </div>
+           </div>
+           <div class="content-Mid"></div>
+           <div class="content-Bottom"></div>
          </div>
         </wxc-pan-item>
       </cell>
@@ -25,6 +35,7 @@
   </wxc-tab-page>
 </template>
 <script>
+const stream = weex.requireModule("stream");
 const dom = weex.requireModule("dom");
 import { WxcTabPage, WxcPanItem, Utils, BindEnv } from "weex-ui";
 import Config from "../../config";
@@ -33,14 +44,28 @@ export default {
     tabTitles: Config.tabTitles,
     tabStyles: Config.tabStyles,
     tabList: [],
-    demoList: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    tabPageHeight: 1334
+    itemList: ['-'],
+    tabPageHeight: 1334,
+    topicParams: {
+      page: 0,
+      tab: "good",
+      limit: 10,
+      mdrender: "true"
+    }
   }),
   created() {
     this.tabPageHeight = Utils.env.getPageHeight();
     //创建二维数组
     this.tabList = [...Array(this.tabTitles.length).keys()].map(i => []);
-    this.$set(this.tabList, 0, this.demoList);
+    this.reqTopic({
+      page:1,
+      tab:this.topicParams.tab,
+      limit:this.topicParams.limit
+    },()=>{
+      this.$set(this.tabList, 0, this.itemList);
+      console.log(this.itemList)
+    });
+
   },
   mounted() {},
   methods: {
@@ -50,7 +75,7 @@ export default {
       /* Unloaded tab analog data request */
       if (!Utils.isNonEmptyArray(self.tabList[index])) {
         setTimeout(() => {
-          this.$set(self.tabList, index, self.demoList);
+          this.$set(self.tabList, index, self.itemList);
         }, 100);
       }
     },
@@ -58,6 +83,22 @@ export default {
       if (BindEnv.supportsEBForAndroid()) {
         this.$refs["wxc-tab-page"].bindExp(e.element);
       }
+    },
+    reqTopic(opt,call) {
+      let {page,tab,limit}=opt
+      stream.fetch(
+        {
+          method: "GET",
+          url: `${
+            Config.rootUrl
+          }/topics?page=${page}&tab=${tab}&limit=${limit}`
+        },
+        res => {
+          this.itemList = JSON.parse(res.data).data;
+          call && call()
+        },
+        err => {}
+      );
     }
   },
   components: { WxcTabPage, WxcPanItem }
@@ -65,6 +106,7 @@ export default {
 </script>
 <style scoped lang="scss">
 $pd10: 20px;
+$pdtxt:10px;
 .home_nav {
   position: fixed;
   top: 0;
@@ -97,14 +139,35 @@ $pd10: 20px;
 }
 
 .cell {
-  background-color: #ffffff;
 }
 
 .content {
   width: 750px;
   height: 300px;
-  border-bottom-width: 1px;
-  align-items: center;
-  justify-content: center;
+  padding-top: $pd10;
+  padding-bottom: $pd10;
+  padding-left: $pd10;
+  padding-right: $pd10;
+  background-color: #ffffff;
+  margin-bottom: 24px;
+}
+.content-Top{
+  flex-direction: row;
+  justify-content:space-between;
+}
+.ct-left{
+  flex-direction: row;
+}
+.ct-left-txt{
+  margin-left:10px;
+}
+.ct-left-img{
+  width:40px;
+  height: 40px;
+  border-radius: 100%;
+}
+.ct-r-txt{
+  color:#A29898;
+  font-size: 24px;
 }
 </style>
