@@ -55,6 +55,5 @@ export default {
             image: "own.png",
             router: "/own"
         }
-    ],
-    rootUrl: 'https://cnodejs.org/api/v1'
+    ]
 }

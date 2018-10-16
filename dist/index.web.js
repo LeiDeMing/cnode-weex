@@ -9997,8 +9997,7 @@ exports.default = {
         name: "我的",
         image: "own.png",
         router: "/own"
-    }],
-    rootUrl: 'https://cnodejs.org/api/v1'
+    }]
 };
 
 /***/ }),
@@ -23876,7 +23875,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 
-var stream = weex.requireModule("stream");
 var dom = weex.requireModule("dom");
 exports.default = {
   mixins: [_mixins2.default],
@@ -23898,17 +23896,22 @@ exports.default = {
   created: function created() {
     var _this = this;
 
+    this.bundleUrl = weex.config.bundleUrl;
     this.tabPageHeight = _utils2.default.env.getPageHeight();
     //创建二维数组
     this.tabList = [].concat(_toConsumableArray(Array(this.tabTitles.length).keys())).map(function (i) {
       return [];
     });
-    this.reqTopic({
-      page: 1,
-      tab: this.topicParams.tab,
-      limit: this.topicParams.limit
-    }, function () {
-      _this.$set(_this.tabList, 0, _this.itemList);
+
+    var _topicParams = this.topicParams,
+        page = _topicParams.page,
+        tab = _topicParams.tab,
+        limit = _topicParams.limit;
+
+    this.GET({
+      params: "/topics?page=" + page + "&tab=" + tab + "&limit=" + limit
+    }, function (res) {
+      _this.$set(_this.tabList, 0, res);
     });
   },
   mounted: function mounted() {},
@@ -23921,40 +23924,20 @@ exports.default = {
       var index = e.page;
       var tabTitles = _config2.default.tabTitles;
 
-      this.reqTopic({
-        page: 1,
-        tab: tabTitles[index]["tab"],
-        limit: this.topicParams.limit
-      }, function () {
-        if (!_utils2.default.isNonEmptyArray(self.tabList[index])) {
-          _this2.$set(self.tabList, index, self.itemList);
-        }
+      this.GET({
+        params: "/topics?page=" + 1 + "&tab=" + tabTitles[index]["tab"] + "&limit=" + this.topicParams.limit
+      }, function (res) {
+        _this2.$set(self.tabList, index, res);
       });
       /* Unloaded tab analog data request */
     },
     wxcPanItemClicked: function wxcPanItemClicked() {
-      console.log(1);
+      this.NAVIGATOR(this.bundleUrl);
     },
     wxcPanItemPan: function wxcPanItemPan(e) {
       if (_bindEnv2.default.supportsEBForAndroid()) {
         this.$refs["wxc-tab-page"].bindExp(e.element);
       }
-    },
-    reqTopic: function reqTopic(opt) {
-      var _this3 = this;
-
-      var call = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var page = opt.page,
-          tab = opt.tab,
-          limit = opt.limit;
-
-      stream.fetch({
-        method: "GET",
-        url: _config2.default.rootUrl + "/topics?page=" + page + "&tab=" + tab + "&limit=" + limit
-      }, function (res) {
-        _this3.itemList = JSON.parse(res.data).data;
-        call && call();
-      }, function (err) {});
     }
   },
   components: { WxcTabPage: _wxcTabPage2.default, WxcPanItem: _wxcPanItem2.default }
@@ -25365,11 +25348,39 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+var stream = weex.requireModule("stream");
+var navigator = weex.requireModule("navigator");
+var modal = weex.requireModule("modal");
 exports.default = {
     data: function data() {
-        return {};
+        return {
+            rootUrl: 'https://cnodejs.org/api/v1'
+        };
     },
-    methods: {},
+    methods: {
+        GET: function GET(obj) {
+            var call = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+            var params = obj.params;
+
+            stream.fetch({
+                method: "GET",
+                url: this.rootUrl + params
+            }, function (res) {
+                var itemList = JSON.parse(res.data).data;
+                call && call(itemList);
+            }, function (err) {});
+        },
+        NAVIGATOR: function NAVIGATOR(url) {
+            var animatedFlag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            navigator.push({
+                url: url,
+                animated: animatedFlag.toString()
+            }, function (event) {
+                // modal.toast({ message: "callback: " + event });
+            });
+        }
+    },
     filters: {
         handleDate: function handleDate() {
             var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";

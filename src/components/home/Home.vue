@@ -46,7 +46,6 @@
   </wxc-tab-page>
 </template>
 <script>
-const stream = weex.requireModule("stream");
 const dom = weex.requireModule("dom");
 import { WxcTabPage, WxcPanItem, Utils, BindEnv } from "weex-ui";
 import Config from "../../config";
@@ -67,17 +66,18 @@ export default {
     }
   }),
   created() {
+    this.bundleUrl = weex.config.bundleUrl;
     this.tabPageHeight = Utils.env.getPageHeight();
     //创建二维数组
     this.tabList = [...Array(this.tabTitles.length).keys()].map(i => []);
-    this.reqTopic(
+
+    let { page, tab, limit } = this.topicParams;
+    this.GET(
       {
-        page: 1,
-        tab: this.topicParams.tab,
-        limit: this.topicParams.limit
+        params: `/topics?page=${page}&tab=${tab}&limit=${limit}`
       },
-      () => {
-        this.$set(this.tabList, 0, this.itemList);
+      res => {
+        this.$set(this.tabList, 0, res);
       }
     );
   },
@@ -87,41 +87,25 @@ export default {
       const self = this;
       const index = e.page;
       const { tabTitles } = Config;
-      this.reqTopic(
+      this.GET(
         {
-          page: 1,
-          tab: tabTitles[index]["tab"],
-          limit: this.topicParams.limit
+          params: `/topics?page=${1}&tab=${tabTitles[index]["tab"]}&limit=${
+            this.topicParams.limit
+          }`
         },
-        () => {
-          if (!Utils.isNonEmptyArray(self.tabList[index])) {
-              this.$set(self.tabList, index, self.itemList);
-          }
+        res => {
+          this.$set(self.tabList, index, res);
         }
       );
       /* Unloaded tab analog data request */
     },
-    wxcPanItemClicked(){
-      console.log(1)
+    wxcPanItemClicked() {
+      this.NAVIGATOR(this.bundleUrl)
     },
     wxcPanItemPan(e) {
       if (BindEnv.supportsEBForAndroid()) {
         this.$refs["wxc-tab-page"].bindExp(e.element);
       }
-    },
-    reqTopic(opt, call=null) {
-      let { page, tab, limit } = opt;
-      stream.fetch(
-        {
-          method: "GET",
-          url: `${Config.rootUrl}/topics?page=${page}&tab=${tab}&limit=${limit}`
-        },
-        res => {
-          this.itemList = JSON.parse(res.data).data;
-          call && call();
-        },
-        err => {}
-      );
     }
   },
   components: { WxcTabPage, WxcPanItem }

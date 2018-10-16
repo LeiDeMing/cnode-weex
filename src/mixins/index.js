@@ -1,9 +1,38 @@
+const stream = weex.requireModule("stream");
+const navigator = weex.requireModule("navigator");
+const modal = weex.requireModule("modal");
 export default {
     data: () => ({
-
+        rootUrl: 'https://cnodejs.org/api/v1'
     }),
     methods: {
+        GET(obj, call = null) {
+            let {
+                params
+            } = obj
+            stream.fetch({
+                    method: "GET",
+                    url: this.rootUrl + params
+                },
+                res => {
+                    let itemList = JSON.parse(res.data).data;
+                    call && call(itemList);
+                },
+                err => {
 
+                }
+            );
+        },
+        NAVIGATOR(url,animatedFlag=true) {
+            navigator.push({
+                    url: url,
+                    animated: animatedFlag.toString()
+                },
+                event => {
+                    // modal.toast({ message: "callback: " + event });
+                }
+            );
+        }
     },
     filters: {
         handleDate(time = "2000-03-22T02:35:23.073Z") {
@@ -11,8 +40,8 @@ export default {
             return t.toISOString()
         },
         timeago(time = "2000-03-22T02:35:23.073Z") { //dateTimeStamp是一个时间毫秒，注意时间戳是秒的形式，在这个毫秒的基础上除以1000，就是十位数的时间戳。13位数的都是时间毫秒。
-            const dateTimeStamp=new Date(time).getTime()
-            let result=""
+            const dateTimeStamp = new Date(time).getTime()
+            let result = ""
             var minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
             var hour = minute * 60;
             var day = hour * 24;
