@@ -14,8 +14,9 @@
             class="cell"
             :key="key">
         <wxc-pan-item :ext-id="'1-' + (v) + '-' + (key)"
-                      url="/"
-                      @wxcPanItemPan="wxcPanItemPan">
+                      @wxcPanItemPan="wxcPanItemPan"
+                      @wxcPanItemClicked="wxcPanItemClicked"
+                      >
          <div class="content">
            <div class="content-Top">
              <div class="ct-left">
@@ -77,7 +78,6 @@ export default {
       },
       () => {
         this.$set(this.tabList, 0, this.itemList);
-        console.log(this.itemList);
       }
     );
   },
@@ -101,12 +101,15 @@ export default {
       );
       /* Unloaded tab analog data request */
     },
+    wxcPanItemClicked(){
+      console.log(1)
+    },
     wxcPanItemPan(e) {
       if (BindEnv.supportsEBForAndroid()) {
         this.$refs["wxc-tab-page"].bindExp(e.element);
       }
     },
-    reqTopic(opt, call) {
+    reqTopic(opt, call=null) {
       let { page, tab, limit } = opt;
       stream.fetch(
         {
