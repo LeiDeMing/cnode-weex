@@ -220,6 +220,10 @@
         "source": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.1.0\\res\\layout\\abc_activity_chooser_view.xml"
     },
     {
+        "merged": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_network.xml",
+        "source": "D:\\cnode-weex\\platforms\\android\\app\\src\\main\\res\\layout\\activity_network.xml"
+    },
+    {
         "merged": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_up_container.xml",
         "source": "D:\\cnode-weex\\platforms\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.1.0\\res\\layout\\abc_action_bar_up_container.xml"
     },

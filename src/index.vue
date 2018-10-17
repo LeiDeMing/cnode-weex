@@ -1,70 +1,70 @@
 <template>
-  <div class="wrapper">
-    <text class="greeting"></text>
-    <router-view/>
-    <div class="navBar">
-      <div class="navBarLine" v-for="(item,key) in tabBar" :key="key" @click="jump(item.router)">
-        <image class="navBarImg" :src="urlImg+item.image"></image>
-        <text class="navBarText">{{item.name}}</text>
-      </div>
-    </div>    
-  </div>
+  <wxc-tab-bar :tab-titles="tabTitles"
+               :tab-styles="tabStyles"
+               title-type="text"
+               @wxcTabBarCurrentTabSelected="wxcTabBarCurrentTabSelected">
+    <!--The first page content-->
+    <div class="item-container" :style="contentStyle">
+      <vue-home/>
+    </div>
+
+    <!--The second page content-->
+    <div class="item-container" :style="contentStyle"><text>Hot</text></div>
+
+    <!-- The third page content-->
+    <div class="item-container" :style="contentStyle"><text>Message</text></div>
+  </wxc-tab-bar>
 </template>
+
 <script>
-import Config from './config'
+import Config from "./config";
+import { WxcTabBar, Utils } from "weex-ui";
+import Home from'./components/home/Home.vue'
 export default {
   name: "App",
-  data: () => ({
-    tabBar:Config.tabBar,
-    urlImg: "http://52xuanxuan.com:3000/images/"
-  }),
+  data() {
+    return {
+      tabTitles: Config.tabBarTitles,
+      tabStyles: Config.tabStyles
+    };
+  },
   created() {
-    
+    const tabPageHeight = Utils.env.getPageHeight();
+    // If the page doesn't have a navigation bar
+    // const tabPageHeight = env.deviceHeight / env.deviceWidth * 750;
+    const { tabStyles } = this;
+    this.contentStyle = { height: tabPageHeight+ "px" };
   },
   methods: {
-    jump(r) {
-      this.$router.push(r);
+    wxcTabBarCurrentTabSelected(e) {
+      const index = e.page;
+      // console.log(index);
     }
-  }
+    // jump() {
+    //   modal.toast({
+    //     message: Config.setBundleUrl(
+    //       weex.config.bundleUrl,
+    //       "/components/own/Own.js"
+    //     ),
+    //     duration: 4
+    //   });
+    //   navigator.push({
+    //     url: Util.setBundleUrl(weex.config.bundleUrl, "/components/own/Own.js")
+    //   });
+    // },
+  },
+  components: { 
+    WxcTabBar,
+    'vue-home':Home
+     }
 };
 </script>
 
-<style scoped lang="scss">
-$pd20: 20px;
-$pd10: 8px;
-$wh50: 34px;
-.navBar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 750px;
-  background-color: #ffffff;
-  flex-direction: row;
-  padding-left: $pd20;
-  padding-right: $pd20;
-  padding-top: $pd10;
-  padding-bottom: $pd10;
-  border-top-width: 1px;
-  border-top-color: #eeeeee;
-}
-.navBarText {
-  text-align: center;
-  font-size: 20px;
-  margin-top: 4px;
-}
-.navBarImg {
-  width: $wh50;
-  height: $wh50;
-}
-.navBarLine {
-  flex: 1;
-  align-items: center;
-}
-
+<style scoped>
 .item-container {
   width: 750px;
   background-color: #f2f3f4;
+  align-items: center;
+  justify-content: center;
 }
-
-
 </style>

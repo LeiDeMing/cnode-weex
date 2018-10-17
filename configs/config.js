@@ -7,12 +7,18 @@ const config = {
   pluginConfigPath: 'plugins/plugins.json',
   pluginFilePath: 'plugins/plugins.js',
   // router
-  routerFilePath: 'router.js',
   // common
+  sourceDir: 'src',
   templateDir: '.temp',
   entryFilePath: 'entry.js',
   // Module exclude from compile process
   excludeModuleReg: /node_modules(?!(\/|\\).*(weex).*)/,
+  // Filter for entry files
+  // see: https://www.npmjs.com/package/glob#glob-primer
+  entryFilter: '**/*.vue',
+  // Options for the filter
+  // see: https://www.npmjs.com/package/glob#options
+  entryFilterOptions: {},
   dev: {
     // Various Dev Server settings
     contentBase: ROOT,
@@ -27,14 +33,7 @@ const config = {
       aggregateTimeout: 300,
       poll: false
     },
-    // Use Eslint Loader?
-    // If true, your code will be linted during bundling and
-    // linting errors and warnings will be shown in the console.
-    useEslint: false,
-    // If true, eslint errors and warnings will also be shown in the error overlay
-    // in the browser.
-    showEslintErrorsInOverlay: false,
-    /**
+        /**
      * Source Maps
      */
     // https://webpack.js.org/configuration/devtool/#development

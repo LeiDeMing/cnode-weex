@@ -10,11 +10,21 @@ import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.common.WXException;
 
+//修复7.0  不允许使用file://的问题
+import android.os.Build;
+import android.os.StrictMode;
+
 public class WXApplication extends Application {
 
   @Override
   public void onCreate() {
     super.onCreate();
+    //修复7.0  不允许使用file://的问题
+    if (Build.VERSION.SDK_INT>=18) {
+      StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+      StrictMode.setVmPolicy(builder.build());
+      builder.detectFileUriExposure();
+    }
     WXSDKEngine.addCustomOptions("appName", "WXSample");
     WXSDKEngine.addCustomOptions("appGroup", "WXApp");
     WXSDKEngine.initialize(this,

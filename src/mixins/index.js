@@ -3,7 +3,74 @@ const navigator = weex.requireModule("navigator");
 const modal = weex.requireModule("modal");
 export default {
     data: () => ({
-        rootUrl: 'https://cnodejs.org/api/v1'
+        rootUrl: 'https://cnodejs.org/api/v1',
+        tabTitles: [{
+                title: "全部",
+                tab: '',
+                icon: "/",
+                activeIcon: "/"
+            },
+            {
+                title: "精华",
+                tab: 'good'
+            },
+            {
+                title: "分享",
+                tab: 'share'
+            },
+            {
+                title: "问答",
+                tab: 'ask'
+            },
+            {
+                title: "招聘",
+                tab: 'job'
+            }
+        ],
+        tabBarTitles: [{
+                title: "首页"
+            },
+            {
+                title: "--"
+            },
+            {
+                title: "我的"
+            },
+        ],
+        tabStyles: {
+            bgColor: "#026fff",
+            titleColor: "#eeeeee",
+            activeTitleColor: "#ffffff",
+            activeBgColor: "#026fff",
+            isActiveTitleBold: true,
+            iconWidth: 70,
+            iconHeight: 70,
+            width: 120,
+            height: 80,
+            fontSize: 24,
+            hasActiveBottom: true,
+            activeBottomColor: "#ffffff",
+            activeBottomHeight: 6,
+            activeBottomWidth: 120,
+            textPaddingLeft: 10,
+            textPaddingRight: 10
+        },
+        tabBar: [{
+                name: "首页",
+                image: "home.png",
+                router: "/"
+            },
+            {
+                name: "--",
+                image: "other.png",
+                router: "/"
+            },
+            {
+                name: "我的",
+                image: "own.png",
+                router: "/own"
+            }
+        ]
     }),
     methods: {
         GET(obj, call = null) {
@@ -23,7 +90,7 @@ export default {
                 }
             );
         },
-        NAVIGATOR(url,animatedFlag=true) {
+        NAVIGATOR(url, animatedFlag = true) {
             navigator.push({
                     url: url,
                     animated: animatedFlag.toString()
@@ -32,6 +99,46 @@ export default {
                     // modal.toast({ message: "callback: " + event });
                 }
             );
+        },
+        setBundleUrl(url, jsFile) {
+            const bundleUrl = url;
+            let host = '';
+            let path = '';
+            let nativeBase;
+            const isAndroidAssets = bundleUrl.indexOf('your_current_IP') >= 0 || bundleUrl.indexOf('file://assets/') >= 0;
+            const isiOSAssets = bundleUrl.indexOf('file:///') >= 0 && bundleUrl.indexOf('WeexDemo.app') > 0;
+            if (isAndroidAssets) {
+                nativeBase = 'file://assets/dist';
+            } else if (isiOSAssets) {
+                nativeBase = bundleUrl.substring(0, bundleUrl.lastIndexOf('/') + 1);
+            } else {
+                const matches = /\/\/([^\/]+?)\//.exec(bundleUrl);
+                const matchFirstPath = /\/\/[^\/]+\/([^\/\s]+)\//.exec(bundleUrl);
+                if (matches && matches.length >= 2) {
+                    host = matches[1];
+                }
+                if (matchFirstPath && matchFirstPath.length >= 2) {
+                    path = matchFirstPath[1];
+                }
+                nativeBase = 'http://' + host + '/';
+            }
+            const h5Base = '';
+            // in Native
+            let base = nativeBase;
+            if (typeof navigator !== 'undefined' && (navigator.appCodeName === 'Mozilla' || navigator.product === 'Gecko')) {
+                // check if in weexpack project
+                if (path === 'web' || path === 'dist') {
+                    base = h5Base + '/dist/';
+                } else {
+                    base = h5Base + '';
+                }
+            } else {
+                base = nativeBase + (!!path ? path + '/' : '');
+            }
+
+            const newUrl = base + jsFile;
+            console.log(newUrl)
+            return newUrl;
         }
     },
     filters: {
