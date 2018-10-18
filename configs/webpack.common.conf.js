@@ -70,7 +70,6 @@ const getEntryFile = (dir) => {
 
 // Generate an entry file array before writing a webpack configuration
 getEntryFile();
-//new
 
 /**
  * Plugins for webpack configuration.

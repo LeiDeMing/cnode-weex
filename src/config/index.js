@@ -74,7 +74,7 @@ export default {
         const isAndroidAssets = bundleUrl.indexOf('your_current_IP') >= 0 || bundleUrl.indexOf('file://assets/') >= 0;
         const isiOSAssets = bundleUrl.indexOf('file:///') >= 0 && bundleUrl.indexOf('WeexDemo.app') > 0;
         if (isAndroidAssets) {
-            nativeBase = 'file://assets/dist';
+            nativeBase = 'file://assets/dist/';
         } else if (isiOSAssets) {
             nativeBase = bundleUrl.substring(0, bundleUrl.lastIndexOf('/') + 1);
         } else {
@@ -88,7 +88,11 @@ export default {
             }
             nativeBase = 'http://' + host + '/';
         }
-        const h5Base = './index.html?page=';
+        let h5Base=""
+        // h5Base = './index.html?page=';
+        
+        jsFile = jsFile.replace('.js', '.html')
+
         // in Native
         let base = nativeBase;
         if (typeof navigator !== 'undefined' && (navigator.appCodeName === 'Mozilla' || navigator.product === 'Gecko')) {
@@ -104,5 +108,20 @@ export default {
 
         const newUrl = base + jsFile;
         return newUrl;
+    },
+    req(weexUrl, paras) {
+        const url = weexUrl;
+        let paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+        let paraObj = {}
+        let j = ""
+        for (let i = 0; j = paraString[i]; i++) {
+            paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);
+        }
+        var returnValue = paraObj[paras.toLowerCase()];
+        if (typeof (returnValue) == "undefined") {
+            return null;
+        } else {
+            return returnValue;
+        }
     }
 }

@@ -15,7 +15,7 @@
             :key="key">
         <wxc-pan-item :ext-id="'1-' + (v) + '-' + (key)"
                       @wxcPanItemPan="wxcPanItemPan"
-                      @wxcPanItemClicked="wxcPanItemClicked"
+                      @wxcPanItemClicked="wxcPanItemClicked(item)"
                       >
          <div class="content">
            <div class="content-Top">
@@ -81,7 +81,8 @@ export default {
       }
     );
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     wxcTabPageCurrentTabSelected(e) {
       const self = this;
@@ -99,8 +100,9 @@ export default {
       );
       /* Unloaded tab analog data request */
     },
-    wxcPanItemClicked() {
-      this.NAVIGATOR(this.bundleUrl)
+    wxcPanItemClicked(item) {
+      let {id}=item
+      this.NAVIGATOR(Config.setBundleUrl(weex.config.bundleUrl, `components/detail/Detail.js?id=${id}`))
     },
     wxcPanItemPan(e) {
       if (BindEnv.supportsEBForAndroid()) {

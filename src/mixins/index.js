@@ -100,6 +100,12 @@ export default {
                 }
             );
         },
+        TOAST(msg, time) {
+            modal.toast({
+                message: msg,
+                duration:time
+            })
+        },
         setBundleUrl(url, jsFile) {
             const bundleUrl = url;
             let host = '';

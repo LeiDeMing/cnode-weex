@@ -62,7 +62,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 308);
+/******/ 	return __webpack_require__(__webpack_require__.s = 301);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -11269,6 +11269,337 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ }),
 
+/***/ 16:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    tabTitles: [{
+        title: "全部",
+        tab: '',
+        icon: "/",
+        activeIcon: "/"
+    }, {
+        title: "精华",
+        tab: 'good'
+    }, {
+        title: "分享",
+        tab: 'share'
+    }, {
+        title: "问答",
+        tab: 'ask'
+    }, {
+        title: "招聘",
+        tab: 'job'
+    }],
+    tabBarTitles: [{
+        title: "首页"
+    }, {
+        title: "--"
+    }, {
+        title: "我的"
+    }],
+    tabStyles: {
+        bgColor: "#026fff",
+        titleColor: "#eeeeee",
+        activeTitleColor: "#ffffff",
+        activeBgColor: "#026fff",
+        isActiveTitleBold: true,
+        iconWidth: 70,
+        iconHeight: 70,
+        width: 120,
+        height: 80,
+        fontSize: 24,
+        hasActiveBottom: true,
+        activeBottomColor: "#ffffff",
+        activeBottomHeight: 6,
+        activeBottomWidth: 120,
+        textPaddingLeft: 10,
+        textPaddingRight: 10
+    },
+    tabBar: [{
+        name: "首页",
+        image: "home.png",
+        router: "/"
+    }, {
+        name: "--",
+        image: "other.png",
+        router: "/"
+    }, {
+        name: "我的",
+        image: "own.png",
+        router: "/own"
+    }],
+    setBundleUrl: function setBundleUrl(url, jsFile) {
+        var bundleUrl = url;
+        var host = '';
+        var path = '';
+        var nativeBase = void 0;
+        var isAndroidAssets = bundleUrl.indexOf('your_current_IP') >= 0 || bundleUrl.indexOf('file://assets/') >= 0;
+        var isiOSAssets = bundleUrl.indexOf('file:///') >= 0 && bundleUrl.indexOf('WeexDemo.app') > 0;
+        if (isAndroidAssets) {
+            nativeBase = 'file://assets/dist/';
+        } else if (isiOSAssets) {
+            nativeBase = bundleUrl.substring(0, bundleUrl.lastIndexOf('/') + 1);
+        } else {
+            var matches = /\/\/([^\/]+?)\//.exec(bundleUrl);
+            var matchFirstPath = /\/\/[^\/]+\/([^\/\s]+)\//.exec(bundleUrl);
+            if (matches && matches.length >= 2) {
+                host = matches[1];
+            }
+            if (matchFirstPath && matchFirstPath.length >= 2) {
+                path = matchFirstPath[1];
+            }
+            nativeBase = 'http://' + host + '/';
+        }
+        var h5Base = "";
+        // h5Base = './index.html?page=';
+
+        jsFile = jsFile.replace('.js', '.html');
+
+        // in Native
+        var base = nativeBase;
+        if (typeof navigator !== 'undefined' && (navigator.appCodeName === 'Mozilla' || navigator.product === 'Gecko')) {
+            // check if in weexpack project
+            if (path === 'web' || path === 'dist') {
+                base = h5Base + '/dist/';
+            } else {
+                base = h5Base + '';
+            }
+        } else {
+            base = nativeBase + (!!path ? path + '/' : '');
+        }
+
+        var newUrl = base + jsFile;
+        return newUrl;
+    },
+    req: function req(weexUrl, paras) {
+        var url = weexUrl;
+        var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+        var paraObj = {};
+        var j = "";
+        for (var i = 0; j = paraString[i]; i++) {
+            paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);
+        }
+        var returnValue = paraObj[paras.toLowerCase()];
+        if (typeof returnValue == "undefined") {
+            return null;
+        } else {
+            return returnValue;
+        }
+    }
+};
+
+/***/ }),
+
+/***/ 17:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var stream = weex.requireModule("stream");
+var navigator = weex.requireModule("navigator");
+var modal = weex.requireModule("modal");
+exports.default = {
+    data: function data() {
+        return {
+            rootUrl: 'https://cnodejs.org/api/v1',
+            tabTitles: [{
+                title: "全部",
+                tab: '',
+                icon: "/",
+                activeIcon: "/"
+            }, {
+                title: "精华",
+                tab: 'good'
+            }, {
+                title: "分享",
+                tab: 'share'
+            }, {
+                title: "问答",
+                tab: 'ask'
+            }, {
+                title: "招聘",
+                tab: 'job'
+            }],
+            tabBarTitles: [{
+                title: "首页"
+            }, {
+                title: "--"
+            }, {
+                title: "我的"
+            }],
+            tabStyles: {
+                bgColor: "#026fff",
+                titleColor: "#eeeeee",
+                activeTitleColor: "#ffffff",
+                activeBgColor: "#026fff",
+                isActiveTitleBold: true,
+                iconWidth: 70,
+                iconHeight: 70,
+                width: 120,
+                height: 80,
+                fontSize: 24,
+                hasActiveBottom: true,
+                activeBottomColor: "#ffffff",
+                activeBottomHeight: 6,
+                activeBottomWidth: 120,
+                textPaddingLeft: 10,
+                textPaddingRight: 10
+            },
+            tabBar: [{
+                name: "首页",
+                image: "home.png",
+                router: "/"
+            }, {
+                name: "--",
+                image: "other.png",
+                router: "/"
+            }, {
+                name: "我的",
+                image: "own.png",
+                router: "/own"
+            }]
+        };
+    },
+    methods: {
+        GET: function GET(obj) {
+            var call = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+            var params = obj.params;
+
+            stream.fetch({
+                method: "GET",
+                url: this.rootUrl + params
+            }, function (res) {
+                var itemList = JSON.parse(res.data).data;
+                call && call(itemList);
+            }, function (err) {});
+        },
+        NAVIGATOR: function NAVIGATOR(url) {
+            var animatedFlag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            navigator.push({
+                url: url,
+                animated: animatedFlag.toString()
+            }, function (event) {
+                // modal.toast({ message: "callback: " + event });
+            });
+        },
+        TOAST: function TOAST(msg, time) {
+            modal.toast({
+                message: msg,
+                duration: time
+            });
+        },
+        setBundleUrl: function setBundleUrl(url, jsFile) {
+            var bundleUrl = url;
+            var host = '';
+            var path = '';
+            var nativeBase = void 0;
+            var isAndroidAssets = bundleUrl.indexOf('your_current_IP') >= 0 || bundleUrl.indexOf('file://assets/') >= 0;
+            var isiOSAssets = bundleUrl.indexOf('file:///') >= 0 && bundleUrl.indexOf('WeexDemo.app') > 0;
+            if (isAndroidAssets) {
+                nativeBase = 'file://assets/dist';
+            } else if (isiOSAssets) {
+                nativeBase = bundleUrl.substring(0, bundleUrl.lastIndexOf('/') + 1);
+            } else {
+                var matches = /\/\/([^\/]+?)\//.exec(bundleUrl);
+                var matchFirstPath = /\/\/[^\/]+\/([^\/\s]+)\//.exec(bundleUrl);
+                if (matches && matches.length >= 2) {
+                    host = matches[1];
+                }
+                if (matchFirstPath && matchFirstPath.length >= 2) {
+                    path = matchFirstPath[1];
+                }
+                nativeBase = 'http://' + host + '/';
+            }
+            var h5Base = '';
+            // in Native
+            var base = nativeBase;
+            if (typeof navigator !== 'undefined' && (navigator.appCodeName === 'Mozilla' || navigator.product === 'Gecko')) {
+                // check if in weexpack project
+                if (path === 'web' || path === 'dist') {
+                    base = h5Base + '/dist/';
+                } else {
+                    base = h5Base + '';
+                }
+            } else {
+                base = nativeBase + (!!path ? path + '/' : '');
+            }
+
+            var newUrl = base + jsFile;
+            console.log(newUrl);
+            return newUrl;
+        }
+    },
+    filters: {
+        handleDate: function handleDate() {
+            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";
+
+            var t = new Date(time);
+            return t.toISOString();
+        },
+        timeago: function timeago() {
+            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";
+            //dateTimeStamp是一个时间毫秒，注意时间戳是秒的形式，在这个毫秒的基础上除以1000，就是十位数的时间戳。13位数的都是时间毫秒。
+            var dateTimeStamp = new Date(time).getTime();
+            var result = "";
+            var minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
+            var hour = minute * 60;
+            var day = hour * 24;
+            var week = day * 7;
+            var halfamonth = day * 15;
+            var month = day * 30;
+            var now = new Date().getTime(); //获取当前时间毫秒
+            var diffValue = now - dateTimeStamp; //时间差
+
+            if (diffValue < 0) {
+                return;
+            }
+            var minC = diffValue / minute; //计算时间差的分，时，天，周，月
+            var hourC = diffValue / hour;
+            var dayC = diffValue / day;
+            var weekC = diffValue / week;
+            var monthC = diffValue / month;
+            if (monthC >= 1 && monthC <= 3) {
+                result = " " + parseInt(monthC) + "月前";
+            } else if (weekC >= 1 && weekC <= 3) {
+                result = " " + parseInt(weekC) + "周前";
+            } else if (dayC >= 1 && dayC <= 6) {
+                result = " " + parseInt(dayC) + "天前";
+            } else if (hourC >= 1 && hourC <= 23) {
+                result = " " + parseInt(hourC) + "小时前";
+            } else if (minC >= 1 && minC <= 59) {
+                result = " " + parseInt(minC) + "分钟前";
+            } else if (diffValue >= 0 && diffValue <= minute) {
+                result = "刚刚";
+            } else {
+                var datetime = new Date();
+                datetime.setTime(dateTimeStamp);
+                var Nyear = datetime.getFullYear();
+                var Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+                var Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+                var Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
+                var Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+                var Nsecond = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+                result = Nyear + "-" + Nmonth + "-" + Ndate;
+            }
+            return result;
+        }
+    }
+};
+
+/***/ }),
+
 /***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11498,7 +11829,7 @@ function applyToTag (styleElement, obj) {
 
 /***/ }),
 
-/***/ 308:
+/***/ 301:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11516,34 +11847,34 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _weexVueRender2.default.init(_vue2.default);
 
-var App = __webpack_require__(309);
+var App = __webpack_require__(302);
 new _vue2.default(_vue2.default.util.extend({ el: '#root' }, App));
 
 /***/ }),
 
-/***/ 309:
+/***/ 302:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(310)
+  __webpack_require__(303)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(312),
+  __webpack_require__(305),
   /* template */
-  __webpack_require__(313),
+  __webpack_require__(306),
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-a60d8792",
+  "data-v-6a5ef849",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "D:\\cnode-weex\\src\\components\\own\\Own.vue"
+Component.options.__file = "D:\\cnode-weex\\src\\components\\detail\\Detail.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Own.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Detail.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -11552,9 +11883,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-a60d8792", Component.options)
+    hotAPI.createRecord("data-v-6a5ef849", Component.options)
   } else {
-    hotAPI.reload("data-v-a60d8792", Component.options)
+    hotAPI.reload("data-v-6a5ef849", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -11566,23 +11897,23 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 310:
+/***/ 303:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(311);
+var content = __webpack_require__(304);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("07335a32", content, false, {});
+var update = __webpack_require__(2)("3d8743a5", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js?{\"sourceMap\":false}!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a60d8792\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js?{\"sourceMap\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Own.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js?{\"sourceMap\":false}!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a60d8792\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js?{\"sourceMap\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Own.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js?{\"sourceMap\":false}!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6a5ef849\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js?{\"sourceMap\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Detail.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js?{\"sourceMap\":false}!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6a5ef849\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js?{\"sourceMap\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Detail.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -11593,7 +11924,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 311:
+/***/ 304:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -11608,15 +11939,26 @@ exports.push([module.i, "", ""]);
 
 /***/ }),
 
-/***/ 312:
+/***/ 305:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
+
+var _mixins = __webpack_require__(17);
+
+var _mixins2 = _interopRequireDefault(_mixins);
+
+var _config = __webpack_require__(16);
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 //
 //
 //
@@ -11624,29 +11966,43 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
-  data: function data() {
-    return {};
-  }
+    mixins: [_mixins2.default],
+    data: function data() {
+        return {
+            topicId: ""
+        };
+    },
+    created: function created() {
+        this.topicId = _config2.default.req(weex.config.bundleUrl, 'id');
+        this.GET({
+            params: "/topic/" + this.topicId
+        }, function (res) {
+            console.log(res);
+        });
+    },
+    mounted: function mounted() {
+        //   this.TOAST(Config.req(weex.config.bundleUrl,'id'),30)
+    }
 };
 
 /***/ }),
 
-/***/ 313:
+/***/ 306:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: " weex-ct weex-div",
+    staticClass: "detail weex-ct weex-div",
     attrs: {
       "weex-type": "div"
     }
-  }, [_vm._v("\n    own\n")])
+  }, [_vm._v("\n    1\n")])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-a60d8792", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-6a5ef849", module.exports)
   }
 }
 

@@ -40,18 +40,7 @@ export default {
       const index = e.page;
       // console.log(index);
     }
-    // jump() {
-    //   modal.toast({
-    //     message: Config.setBundleUrl(
-    //       weex.config.bundleUrl,
-    //       "/components/own/Own.js"
-    //     ),
-    //     duration: 4
-    //   });
-    //   navigator.push({
-    //     url: Util.setBundleUrl(weex.config.bundleUrl, "/components/own/Own.js")
-    //   });
-    // },
+    
   },
   components: { 
     WxcTabBar,
