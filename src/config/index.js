@@ -89,9 +89,9 @@ export default {
             nativeBase = 'http://' + host + '/';
         }
         let h5Base=""
-        // h5Base = './index.html?page=';
+        h5Base = './index.html?page=';
         
-        jsFile = jsFile.replace('.js', '.html')
+        // jsFile = jsFile.replace('.js', '.html')
 
         // in Native
         let base = nativeBase;
