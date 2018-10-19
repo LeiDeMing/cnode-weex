@@ -21274,19 +21274,24 @@ exports.default = {
         title: "全部",
         tab: '',
         icon: "/",
-        activeIcon: "/"
+        activeIcon: "/",
+        page: 1
     }, {
         title: "精华",
-        tab: 'good'
+        tab: 'good',
+        page: 1
     }, {
         title: "分享",
-        tab: 'share'
+        tab: 'share',
+        page: 1
     }, {
         title: "问答",
-        tab: 'ask'
+        tab: 'ask',
+        page: 1
     }, {
         title: "招聘",
-        tab: 'job'
+        tab: 'job',
+        page: 1
     }],
     tabBarTitles: [{
         title: "首页"
@@ -21759,49 +21764,39 @@ exports.default = {
             return t.toISOString();
         },
         timeago: function timeago() {
-            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";
+            var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "2000-03-22T02:35:23.073Z";
             //dateTimeStamp是一个时间毫秒，注意时间戳是秒的形式，在这个毫秒的基础上除以1000，就是十位数的时间戳。13位数的都是时间毫秒。
-            var dateTimeStamp = new Date(time).getTime();
-            var result = "";
-            var minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
+            //var str = data;
+            //将字符串转换成时间格式
+            var timePublish = new Date(data);
+            var timeNow = new Date();
+            var minute = 1000 * 60;
             var hour = minute * 60;
             var day = hour * 24;
-            var week = day * 7;
-            var halfamonth = day * 15;
             var month = day * 30;
-            var now = new Date().getTime(); //获取当前时间毫秒
-            var diffValue = now - dateTimeStamp; //时间差
-
+            var diffValue = timeNow - timePublish;
+            var diffMonth = diffValue / month;
+            var diffWeek = diffValue / (7 * day);
+            var diffDay = diffValue / day;
+            var diffHour = diffValue / hour;
+            var diffMinute = diffValue / minute;
+            var result = "";
             if (diffValue < 0) {
-                return;
-            }
-            var minC = diffValue / minute; //计算时间差的分，时，天，周，月
-            var hourC = diffValue / hour;
-            var dayC = diffValue / day;
-            var weekC = diffValue / week;
-            var monthC = diffValue / month;
-            if (monthC >= 1 && monthC <= 3) {
-                result = " " + parseInt(monthC) + "月前";
-            } else if (weekC >= 1 && weekC <= 3) {
-                result = " " + parseInt(weekC) + "周前";
-            } else if (dayC >= 1 && dayC <= 6) {
-                result = " " + parseInt(dayC) + "天前";
-            } else if (hourC >= 1 && hourC <= 23) {
-                result = " " + parseInt(hourC) + "小时前";
-            } else if (minC >= 1 && minC <= 59) {
-                result = " " + parseInt(minC) + "分钟前";
-            } else if (diffValue >= 0 && diffValue <= minute) {
-                result = "刚刚";
-            } else {
-                var datetime = new Date();
-                datetime.setTime(dateTimeStamp);
-                var Nyear = datetime.getFullYear();
-                var Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
-                var Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
-                var Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
-                var Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
-                var Nsecond = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
-                result = Nyear + "-" + Nmonth + "-" + Ndate;
+                alert("错误时间");
+            } else if (diffMonth > 3) {
+                result = timePublish.getFullYear() + "-";
+                result += timePublish.getMonth() + "-";
+                result += timePublish.getDate();
+            } else if (diffMonth > 1) {
+                result = parseInt(diffMonth) + "月前";
+            } else if (diffWeek > 1) {
+                result = parseInt(diffWeek) + "周前";
+            } else if (diffDay > 1) {
+                result = parseInt(diffDay) + "天前";
+            } else if (diffHour > 1) {
+                result = parseInt(diffHour) + "小时前";
+            } else if (diffMinute > 1) {
+                result = parseInt(diffMinute) + "分钟前";
             }
             return result;
         }
@@ -39810,6 +39805,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
 
 var dom = weex.requireModule("dom");
 exports.default = {
@@ -39821,9 +39817,10 @@ exports.default = {
       tabList: [],
       itemList: ["-"],
       tabPageHeight: 1334,
+      tabIndex: 0,
       topicParams: {
-        page: 0,
-        tab: "good",
+        page: 1,
+        tab: "",
         limit: 10,
         mdrender: "true"
       }
@@ -39853,18 +39850,40 @@ exports.default = {
   mounted: function mounted() {},
 
   methods: {
-    wxcTabPageCurrentTabSelected: function wxcTabPageCurrentTabSelected(e) {
+    loadMore: function loadMore() {
+      _config2.default.tabTitles[this.tabIndex].page += 1;
+      this.loadMoreCore();
+    },
+    loadMoreCore: function loadMoreCore() {
       var _this2 = this;
 
-      var self = this;
-      var index = e.page;
       var tabTitles = _config2.default.tabTitles;
+      var limit = this.topicParams.limit;
+      var _tabTitles$tabIndex = tabTitles[this.tabIndex],
+          page = _tabTitles$tabIndex.page,
+          tab = _tabTitles$tabIndex.tab;
 
       this.GET({
-        params: "/topics?page=" + 1 + "&tab=" + tabTitles[index]["tab"] + "&limit=" + this.topicParams.limit
+        params: "/topics?page=" + page + "&tab=" + tab + "&limit=" + limit
       }, function (res) {
-        _this2.$set(self.tabList, index, res);
+        var _tabTitles$tabIndex$a;
+
+        if (!_config2.default.tabTitles[_this2.tabIndex]["arrData"]) {
+          _config2.default.tabTitles[_this2.tabIndex]["arrData"] = [];
+        }
+        (_tabTitles$tabIndex$a = tabTitles[_this2.tabIndex]["arrData"]).push.apply(_tabTitles$tabIndex$a, _toConsumableArray(res));
+        _this2.$set(_this2.tabList, _this2.tabIndex, tabTitles[_this2.tabIndex]["arrData"]);
       });
+    },
+    wxcTabPageCurrentTabSelected: function wxcTabPageCurrentTabSelected(e) {
+      var self = this;
+      this.tabIndex = e.page;
+      if (!_config2.default.tabTitles[this.tabIndex]["arrData"]) {
+        _config2.default.tabTitles[this.tabIndex]["arrData"] = [];
+        this.loadMoreCore();
+      } else {
+        this.$set(this.tabList, this.tabIndex, _config2.default.tabTitles[this.tabIndex]["arrData"]);
+      }
       /* Unloaded tab analog data request */
     },
     wxcPanItemClicked: function wxcPanItemClicked(item) {
@@ -39905,7 +39924,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       style: ({
         height: _vm._px2rem(_vm.tabPageHeight - _vm.tabStyles.height + 'px', 75)
       }),
-      attrs: {}
+      attrs: {
+        "data-evt-loadmore": ""
+      },
+      nativeOn: {
+        "loadmore": _vm.loadMore
+      }
     }, [_c('section', {
       staticClass: "border-cell weex-ct weex-cell",
       attrs: {

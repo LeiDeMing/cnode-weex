@@ -6,27 +6,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>detail</title>
+    <!-- <link rel="stylesheet" href="./css/index.css"> -->
+    <style>
+        .markdown-text img {
+            width: 100%;
+        }
+
+        .markdown-text a {
+            color: #08c;
+            text-decoration: none;
+        }
+
+        .markdown-text pre.prettyprint {
+            font-size: 14px;
+            border-radius: 0;
+            padding: 0 15px;
+            border: none;
+            margin: 20px -10px;
+            border-width: 1px 0;
+            background: #f7f7f7;
+            -o-tab-size: 4;
+            -moz-tab-size: 4;
+            tab-size: 4;
+        }
+
+        pre code {
+            color: inherit;
+            white-space: pre-wrap;
+            background-color: transparent;
+        }
+
+        .inner.topic {
+            padding: 10px;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        blockquote {
+            padding: 0 0 0 15px;
+            margin: 0 0 20px;
+            border-left: 5px solid #eee;
+        }
+
+        .com {
+            color: #800;
+        }
+
+        .pln {
+            color: #000;
+        }
+
+        .kwd {
+            color: #008;
+        }
+
+        .typ {
+            color: #606;
+        }
+
+        .clo,
+        .opn,
+        .pun {
+            color: #660;
+        }
+
+        h1 small,
+        h3 {
+            font-size: 24.5px;
+        }
+
+        .put_good,
+        .put_top {
+            background: #80bd01;
+            padding: 2px 4px;
+            border-radius: 3px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            -o-border-radius: 3px;
+            color: #fff;
+            font-size: 12px;
+            margin-right: 6px;
+        }
+
+        .topic_full_title {
+            overflow: hidden;
+        }
+
+        .topic_full_title span {
+            float: left;
+        }
+
+        .topic_full_title h1 {
+            position: relative;
+            top: -6px;
+            font-size: 24px;
+        }
+
+        .changes {
+            font-size: 12px;
+            color: #838383;
+        }
+
+        .changes span:before {
+            content: "•";
+        }
+    </style>
 </head>
 
 <body>
-    <h1 class="title" id="title">
+    <div id="main">
+        <div id="content">
+            <div class="panel">
+                <div class="header topic_header">
+                    <span class="topic_full_title">
+                        <span class="put_top">置顶</span>
+                        <h1 class="" id="topic_full_title"></h1>
+                    </span>
+                    <div class="changes">
+                        <span id="timeAgo">
+                        </span>
+                        <span class="author">
+                            作者 <a id="author" href="javascript:;"></a>
+                        </span>
+                        <span id="brows">
+                        </span>
+                        <span id="write">
+                        </span>
+                        <span> 来自 分享</span>
+                        <!-- <input class="span-common span-success pull-right collect_btn" type="submit" value="收藏" action="collect"> -->
+                    </div>
+                </div>
+                <div class="inner topic">
+                    <div class="topic_content" id="topic_content">
+                    </div>
+                </div>
+            </div>
 
-    </h1>
-    <div class="content" id="content">
-
+        </div>
     </div>
-
     <script>
         var url = "https://cnodejs.org/api/v1/topic/"
-        var d=""
+        var d = ""
         fetch(url + req('id'))
-        .then(res=>{
-            return res.json()
-        })
-        .then(r=>{
-            d=r.data
-            document.getElementById('content').innerHTML=d.content
-        })
+            .then(res => {
+                return res.json()
+            })
+            .then(r => {
+                d = r.data
+                document.getElementById('topic_content').innerHTML = d.content
+                document.getElementById('topic_full_title').innerText = d.title
+                document.getElementById('timeAgo').innerText = ' 发布于 ' + timeago(d.create_at)
+                document.getElementById('author').innerText=' '+d.author.loginname
+                document.getElementById('brows').innerText=' '+d.visit_count+' 浏览'
+                document.getElementById('write').innerText=' 最后一次编辑是 '+timeago(d.last_reply_at)
+            })
 
         function req(paras) {
             var url = location.href;
@@ -41,6 +173,42 @@
             } else {
                 return returnValue;
             }
+        }
+
+        function timeago(data) { //dateTimeStamp是一个时间毫秒，注意时间戳是秒的形式，在这个毫秒的基础上除以1000，就是十位数的时间戳。13位数的都是时间毫秒。
+            //var str = data;
+            //将字符串转换成时间格式
+            var timePublish = new Date(data);
+            var timeNow = new Date();
+            var minute = 1000 * 60;
+            var hour = minute * 60;
+            var day = hour * 24;
+            var month = day * 30;
+            var diffValue = timeNow - timePublish;
+            var diffMonth = diffValue / month;
+            var diffWeek = diffValue / (7 * day);
+            var diffDay = diffValue / day;
+            var diffHour = diffValue / hour;
+            var diffMinute = diffValue / minute;
+
+            if (diffValue < 0) {
+                alert("错误时间");
+            } else if (diffMonth > 3) {
+                result = timePublish.getFullYear() + "-";
+                result += timePublish.getMonth() + "-";
+                result += timePublish.getDate();
+            } else if (diffMonth > 1) {
+                result = parseInt(diffMonth) + "月前";
+            } else if (diffWeek > 1) {
+                result = parseInt(diffWeek) + "周前";
+            } else if (diffDay > 1) {
+                result = parseInt(diffDay) + "天前";
+            } else if (diffHour > 1) {
+                result = parseInt(diffHour) + "小时前";
+            } else if (diffMinute > 1) {
+                result = parseInt(diffMinute) + "分钟前";
+            }
+            return result;
         }
     </script>
 </body>

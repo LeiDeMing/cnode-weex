@@ -8,7 +8,8 @@
     <list v-for="(v,index) in tabList"
           :key="index"
           class="item-container"
-          :style="{ height: (tabPageHeight - tabStyles.height) + 'px' }">
+          :style="{ height: (tabPageHeight - tabStyles.height) + 'px' }"
+          @loadmore="loadMore">
       <cell class="border-cell"></cell>
       <cell v-for="(item,key) in v"
             class="cell"
@@ -58,9 +59,10 @@ export default {
     tabList: [],
     itemList: ["-"],
     tabPageHeight: 1334,
+    tabIndex: 0,
     topicParams: {
-      page: 0,
-      tab: "good",
+      page: 1,
+      tab: "",
       limit: 10,
       mdrender: "true"
     }
@@ -81,28 +83,56 @@ export default {
       }
     );
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
-    wxcTabPageCurrentTabSelected(e) {
-      const self = this;
-      const index = e.page;
+    loadMore() {
+      Config.tabTitles[this.tabIndex].page += 1;
+      this.loadMoreCore();
+    },
+    loadMoreCore() {
       const { tabTitles } = Config;
+      let { limit } = this.topicParams;
+      let { page, tab } = tabTitles[this.tabIndex];
       this.GET(
         {
-          params: `/topics?page=${1}&tab=${tabTitles[index]["tab"]}&limit=${
-            this.topicParams.limit
-          }`
+          params: `/topics?page=${page}&tab=${tab}&limit=${limit}`
         },
         res => {
-          this.$set(self.tabList, index, res);
+          if(!Config.tabTitles[this.tabIndex]["arrData"]){
+            Config.tabTitles[this.tabIndex]["arrData"]=[]
+          }
+          tabTitles[this.tabIndex]["arrData"].push(...res);
+          this.$set(
+            this.tabList,
+            this.tabIndex,
+            tabTitles[this.tabIndex]["arrData"]
+          );
         }
       );
+    },
+    wxcTabPageCurrentTabSelected(e) {
+      const self = this;
+      this.tabIndex = e.page;
+      if (!Config.tabTitles[this.tabIndex]["arrData"]) {
+        Config.tabTitles[this.tabIndex]["arrData"] = [];
+        this.loadMoreCore();
+      } else {
+        this.$set(
+          this.tabList,
+          this.tabIndex,
+          Config.tabTitles[this.tabIndex]["arrData"]
+        );
+      }
       /* Unloaded tab analog data request */
     },
     wxcPanItemClicked(item) {
-      let {id}=item
-      this.NAVIGATOR(Config.setBundleUrl(weex.config.bundleUrl, `components/detail/Detail.js?id=${id}`))
+      let { id } = item;
+      this.NAVIGATOR(
+        Config.setBundleUrl(
+          weex.config.bundleUrl,
+          `components/detail/Detail.js?id=${id}`
+        )
+      );
     },
     wxcPanItemPan(e) {
       if (BindEnv.supportsEBForAndroid()) {

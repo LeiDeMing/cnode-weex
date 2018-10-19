@@ -19682,7 +19682,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "weex-type": "div"
     }
-  }, [_vm._v("\n    own\n")])
+  })
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

@@ -3,23 +3,28 @@ export default {
             title: "全部",
             tab: '',
             icon: "/",
-            activeIcon: "/"
+            activeIcon: "/",
+            page:1,
         },
         {
             title: "精华",
-            tab: 'good'
+            tab: 'good',
+            page:1
         },
         {
             title: "分享",
-            tab: 'share'
+            tab: 'share',
+            page:1
         },
         {
             title: "问答",
-            tab: 'ask'
+            tab: 'ask',
+            page:1
         },
         {
             title: "招聘",
-            tab: 'job'
+            tab: 'job',
+            page:1
         }
     ],
     tabBarTitles: [{

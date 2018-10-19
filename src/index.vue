@@ -12,7 +12,8 @@
     <div class="item-container" :style="contentStyle"><text>Hot</text></div>
 
     <!-- The third page content-->
-    <div class="item-container" :style="contentStyle"><text>Message</text></div>
+    <div class="item-container" :style="contentStyle">
+    </div>
   </wxc-tab-bar>
 </template>
 

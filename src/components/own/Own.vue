@@ -1,6 +1,6 @@
 <template>
     <div>
-        own
+        
     </div>
 </template>
 <script>

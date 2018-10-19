@@ -30,7 +30,8 @@ import com.taobao.weex.utils.WXSoInstallMgrSdk;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.os.Build;
+import android.os.StrictMode;
 
 public class WXPageActivity extends AbsWeexActivity implements
     WXSDKInstance.NestedInstanceInterceptor {
@@ -49,6 +50,12 @@ public class WXPageActivity extends AbsWeexActivity implements
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if (Build.VERSION.SDK_INT>=18) {
+      StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+      StrictMode.setVmPolicy(builder.build());
+      builder.detectFileUriExposure();
+    }
+
     setContentView(R.layout.activity_wxpage);
     mContainer = (ViewGroup) findViewById(R.id.container);
     mProgressBar = (ProgressBar) findViewById(R.id.progress);
